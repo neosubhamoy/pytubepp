@@ -77,7 +77,6 @@ pytubePP - (Pytube Post Processor) is a Fully Open Sourced Project licensed unde
 
 **🌟 Liked this project? Please consider giving it a star to show me your appreciation**
 <br></br>
-<br></br>
 
 ****
 
