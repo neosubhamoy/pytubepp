@@ -1,0 +1,8 @@
+pytube
+requests
+ffmpy
+mutagen
+tabulate
+tqdm
+appdirs
+setuptools
