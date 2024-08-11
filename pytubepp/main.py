@@ -351,14 +351,14 @@ def download_stream(link, chosen_stream):
         print_short_info(chosen_stream)
         allowed_streams = get_allowed_streams(link)
         if chosen_stream in allowed_streams:
-            if chosen_stream in ['720', '720p', 'hd']:
-                download_progressive(stream, 22, title, '720p', 'mp4')
-
-            elif chosen_stream in ['360', '360p']:
+            if chosen_stream in ['360', '360p']:
                 download_progressive(stream, 18, title, '360p', 'mp4')
 
             elif chosen_stream in ['1080', '1080p', 'fhd']:
                 merge_audio_video(title, '1080p', 'mp4', download_nonprogressive(stream, 137, 140, 'mp4', tempDIR))
+
+            elif chosen_stream in ['720', '720p', 'hd']:
+                merge_audio_video(title, '720p', 'mp4', download_nonprogressive(stream, 136, 140, 'mp4', tempDIR))
 
             elif chosen_stream in ['480', '480p']:
                 merge_audio_video(title, '480p', 'mp4', download_nonprogressive(stream, 135, 140, 'mp4', tempDIR))
