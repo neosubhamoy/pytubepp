@@ -6,3 +6,5 @@ tabulate
 tqdm
 appdirs
 setuptools
+wheel
+twine
