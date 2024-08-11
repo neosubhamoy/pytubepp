@@ -16,7 +16,7 @@
 * Highly Configurable and Many More 😉
 
 ### **🧩 Dependencies**
-* [pytube](https://pypi.org/project/pytube/)
+* [pytubefix](https://pypi.org/JuanBindez/pytubefix)
 * [FFmpeg (Not Pre-Included)](https://ffmpeg.org/)
 * [ffmpy](https://pypi.org/project/ffmpy/)
 * [mutagen](https://pypi.org/project/mutagen/)

@@ -22,7 +22,7 @@ setup(
         ],
     },
     install_requires=[
-        'pytube',
+        'pytubefix',
         'requests',
         'ffmpy',
         'mutagen',

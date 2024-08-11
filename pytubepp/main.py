@@ -1,4 +1,4 @@
-from pytube import YouTube
+from pytubefix import YouTube
 from mutagen.id3 import ID3, APIC, TIT2, TPE1, TALB
 from tabulate import tabulate
 from tqdm import tqdm
