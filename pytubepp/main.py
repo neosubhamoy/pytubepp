@@ -137,10 +137,10 @@ def convert_to_mp3(title, thumbnail_url, random_filename, mp3_artist='Unknown', 
     print('Done! 🎉')
 
 def download_progressive(stream, itag, title, resolution, file_extention, tempDIR=tempDIR, downloadDIR=downloadDIR):
-    global vdo_filesize, progress_bar
+    global total_filesize, progress_bar
     selected_vdo = stream.get_by_itag(itag)
-    vdo_filesize = selected_vdo.filesize
-    progress_bar = tqdm(total=vdo_filesize, unit='B', unit_scale=True, desc="Downloading")
+    total_filesize = selected_vdo.filesize
+    progress_bar = tqdm(total=total_filesize, unit='B', unit_scale=True, desc="Downloading Video+Audio")
     random_filename = str(random.randint(1000000000, 9999999999))
     filename = random_filename + '_vdo.' + file_extention
     output_temp_file = os.path.join(tempDIR, filename)
@@ -151,21 +151,23 @@ def download_progressive(stream, itag, title, resolution, file_extention, tempDI
     print('Done! 🎉')
 
 def download_nonprogressive(stream, itag_vdo, itag_ado, file_extention, output_path):
-    global vdo_filesize, progress_bar
+    global total_filesize, progress_bar
     selected_vdo = stream.get_by_itag(itag_vdo)
     selected_ado = stream.get_by_itag(itag_ado)
-    vdo_filesize = selected_vdo.filesize
-    progress_bar = tqdm(total=vdo_filesize, unit='B', unit_scale=True, desc="Downloading")
     random_filename = str(random.randint(1000000000, 9999999999))
+    total_filesize = selected_vdo.filesize
+    progress_bar = tqdm(total=total_filesize, unit='B', unit_scale=True, desc="Downloading Video")
     selected_vdo.download(output_path=output_path, filename=random_filename + '_vdo.' + file_extention)
+    total_filesize = selected_ado.filesize
+    progress_bar = tqdm(total=total_filesize, unit='B', unit_scale=True, desc="Downloading Audio")
     selected_ado.download(output_path=output_path, filename=random_filename + '_ado.' + file_extention)
     return random_filename
 
 def download_audio(stream, itag, output_path):
-    global vdo_filesize, progress_bar
+    global total_filesize, progress_bar
     selected_ado = stream.get_by_itag(itag)
-    vdo_filesize = selected_ado.filesize
-    progress_bar = tqdm(total=vdo_filesize, unit='B', unit_scale=True, desc="Downloading")
+    total_filesize = selected_ado.filesize
+    progress_bar = tqdm(total=total_filesize, unit='B', unit_scale=True, desc="Downloading Audio")
     random_filename = str(random.randint(1000000000, 9999999999))
     selected_ado.download(output_path=output_path, filename=random_filename + '_ado.mp4')
     return random_filename
@@ -188,7 +190,7 @@ def download_thumbnail(url, file_path):
         sys.exit()
 
 def progress(chunk, file_handle, bytes_remaining):
-    chunk_size = vdo_filesize - bytes_remaining
+    chunk_size = total_filesize - bytes_remaining
     progress_bar.update(chunk_size - progress_bar.n)
 
     if bytes_remaining == 0:
@@ -241,39 +243,39 @@ def set_global_video_info(link):
         stream_resolutions = {
             '2160p': {
                 'allowed_streams': ['4k', '2160', '2160p'],
-                'message': ['2160p', 'webm', 'vp90', 'opus', '[4k, 2160, 2160p]']
+                'message': ['2160p', '[4k, 2160, 2160p]']
             },
             '1440p': {
                 'allowed_streams': ['2k', '1440', '1440p'],
-                'message': ['1440p', 'webm', 'vp90', 'opus', '[2k, 1440, 1440p]']
+                'message': ['1440p', '[2k, 1440, 1440p]']
             },
             '1080p': {
                 'allowed_streams': ['fhd', '1080', '1080p'],
-                'message': ['1080p', 'mp4', 'avc1', 'aac', '[fhd, 1080, 1080p]']
+                'message': ['1080p', '[fhd, 1080, 1080p]']
             },
             '720p': {
                 'allowed_streams': ['hd', '720', '720p'],
-                'message': ['720p', 'mp4', 'avc1', 'aac', '[hd, 720, 720p]']
+                'message': ['720p', '[hd, 720, 720p]']
             },
             '480p': {
                 'allowed_streams': ['480', '480p'],
-                'message': ['480p', 'mp4', 'avc1', 'aac', '[480, 480p]']
+                'message': ['480p', '[480, 480p]']
             },
             '360p': {
                 'allowed_streams': ['360', '360p'],
-                'message': ['360p', 'mp4', 'avc1', 'aac', '[360, 360p]']
+                'message': ['360p', '[360, 360p]']
             },
             '240p': {
                 'allowed_streams': ['240', '240p'],
-                'message': ['240p', 'mp4', 'avc1', 'aac', '[240, 240p]']
+                'message': ['240p', '[240, 240p]']
             },
             '144p': {
                 'allowed_streams': ['144', '144p'],
-                'message': ['144p', 'mp4', 'avc1', 'aac', '[144, 144p]']
+                'message': ['144p', '[144, 144p]']
             },
             'mp3': {
                 'allowed_streams': ['mp3'],
-                'message': ['mp3', 'mp3', 'none', 'mp3', '[mp3]']
+                'message': ['mp3', '[mp3]']
             }
         }
         for res in stream_resolutions.keys():
@@ -297,10 +299,50 @@ def show_video_info(link):
                 else:
                     matching_stream = next((s for s in stream if s.resolution == res), None)
                 if matching_stream is not None:
-                    filesize = f"{matching_stream.filesize / (1024 * 1024):.2f} MB"
+                    if res in ['2160p', '1440p']:
+                        type = matching_stream.mime_type
+                        filesize = f"{(matching_stream.filesize + stream.get_by_itag(251).filesize) / (1024 * 1024):.2f} MB"
+                        fps = f"{matching_stream.fps}fps"
+                        vdo_codec = matching_stream.video_codec
+                        ado_codec = stream.get_by_itag(251).audio_codec
+                        vdo_bitrate = f"{matching_stream.bitrate / 1024:.0f}kbps"
+                        ado_bitrate = stream.get_by_itag(251).abr
+                    elif res in ['1080p', '720p', '480p']:
+                        type = matching_stream.mime_type
+                        filesize = f"{(matching_stream.filesize + stream.get_by_itag(140).filesize) / (1024 * 1024):.2f} MB"
+                        fps = f"{matching_stream.fps}fps"
+                        vdo_codec = matching_stream.video_codec
+                        ado_codec = stream.get_by_itag(140).audio_codec
+                        vdo_bitrate = f"{matching_stream.bitrate / 1024:.0f}kbps"
+                        ado_bitrate = stream.get_by_itag(140).abr
+                    elif res == '360p':
+                        type = matching_stream.mime_type
+                        filesize = f"{matching_stream.filesize / (1024 * 1024):.2f} MB"
+                        fps = f"{matching_stream.fps}fps"
+                        vdo_codec = matching_stream.video_codec
+                        ado_codec = matching_stream.audio_codec
+                        vdo_bitrate = f"{matching_stream.bitrate / 1024:.0f}kbps"
+                        ado_bitrate = matching_stream.abr
+                    elif res in ['240p', '144p']:
+                        type = matching_stream.mime_type
+                        filesize = f"{(matching_stream.filesize + stream.get_by_itag(139).filesize) / (1024 * 1024):.2f} MB"
+                        fps = f"{matching_stream.fps}fps"
+                        vdo_codec = matching_stream.video_codec
+                        ado_codec = stream.get_by_itag(139).audio_codec
+                        vdo_bitrate = f"{matching_stream.bitrate / 1024:.0f}kbps"
+                        ado_bitrate = stream.get_by_itag(139).abr
+                    elif res == 'mp3':
+                        type = "audio/mp3"
+                        filesize = f"{matching_stream.filesize / (1024 * 1024):.2f} MB"
+                        fps = "none"
+                        vdo_codec = "none"
+                        ado_codec = matching_stream.audio_codec
+                        vdo_bitrate = "none"
+                        ado_bitrate = matching_stream.abr
+
                 else:
                     filesize = "N/A"
-                message = stream_resolutions[res]['message'] + [filesize]
+                message = stream_resolutions[res]['message'] + [type] + [filesize] + [fps] + [vdo_codec] + [ado_codec] + [vdo_bitrate] + [ado_bitrate]
                 table.append(message)
 
         if not found:
@@ -308,7 +350,7 @@ def show_video_info(link):
             sys.exit()
 
         print(f'\nTitle: {video.title}\nAuthor: {author}\nViews: {views}\n')
-        print(tabulate(table, headers=['Streams', 'Format', 'Video Codec', 'Audio Codec', 'Aliases', 'Size']))
+        print(tabulate(table, headers=['Stream', 'Alias', 'Format', 'Size', 'FrameRate', 'V-Codec', 'A-Codec', 'V-BitRate', 'A-BitRate']))
         print('\n')
     else:
         print('\nInvalid video link! Please enter a valid video url...!!')
@@ -328,23 +370,23 @@ def get_allowed_streams(link):
     
 def print_short_info(chosen_stream):
     if chosen_stream in ['720', '720p', 'hd']:
-        print(f'\nVideo: {title}\nSelected Stream: 720p (HD) [mp4 - avc1 - aac]\n')
+        print(f'\nVideo: {title}\nSelected Stream: 720p (HD)\n')
     elif chosen_stream in ['360', '360p']:
-        print(f'\nVideo: {title}\nSelected Stream: 360p (SD) [mp4 - avc1 - aac]\n')
+        print(f'\nVideo: {title}\nSelected Stream: 360p (SD)\n')
     elif chosen_stream in ['1080', '1080p', 'fhd']:
-        print(f'\nVideo: {title}\nSelected Stream: 1080p (FHD) [mp4 - avc1 - aac]\n')
+        print(f'\nVideo: {title}\nSelected Stream: 1080p (FHD)\n')
     elif chosen_stream in ['480', '480p']:
-        print(f'\nVideo: {title}\nSelected Stream: 480p (SD) [mp4 - avc1 - aac]\n')
+        print(f'\nVideo: {title}\nSelected Stream: 480p (SD)\n')
     elif chosen_stream in ['240', '240p']:
-        print(f'\nVideo: {title}\nSelected Stream: 240p (LD) [mp4 - avc1 - aac]\n')
+        print(f'\nVideo: {title}\nSelected Stream: 240p (LD)\n')
     elif chosen_stream in ['144', '144p']:
-        print(f'\nVideo: {title}\nSelected Stream: 144p (LD) [mp4 - avc1 - aac]\n')
+        print(f'\nVideo: {title}\nSelected Stream: 144p (LD)\n')
     elif chosen_stream in ['2160', '2160p', '4k']:
-        print(f'\nVideo: {title}\nSelected Stream: 2160p (4K) [webm - vp90 - opus]\n')
+        print(f'\nVideo: {title}\nSelected Stream: 2160p (4K)\n')
     elif chosen_stream in ['1440', '1440p', '2k']:
-        print(f'\nVideo: {title}\nSelected Stream: 1440p (2K) [webm - vp90 - opus]\n')
+        print(f'\nVideo: {title}\nSelected Stream: 1440p (2K)\n')
     elif chosen_stream == 'mp3':
-        print(f'\nVideo: {title}\nSelected Stream: mp3 (Audio) [mp3 - dynamic - 44.1khz]\n')
+        print(f'\nVideo: {title}\nSelected Stream: mp3 (Audio)\n')
 
 def download_stream(link, chosen_stream):
     if set_global_video_info(link):
@@ -355,25 +397,37 @@ def download_stream(link, chosen_stream):
                 download_progressive(stream, 18, title, '360p', 'mp4')
 
             elif chosen_stream in ['1080', '1080p', 'fhd']:
-                merge_audio_video(title, '1080p', 'mp4', download_nonprogressive(stream, 137, 140, 'mp4', tempDIR))
+                if stream.get_by_itag(299):
+                    merge_audio_video(title, '1080p', 'mp4', download_nonprogressive(stream, 299, 140, 'mp4', tempDIR))
+                elif stream.get_by_itag(137):
+                    merge_audio_video(title, '1080p', 'mp4', download_nonprogressive(stream, 137, 140, 'mp4', tempDIR))
 
             elif chosen_stream in ['720', '720p', 'hd']:
-                merge_audio_video(title, '720p', 'mp4', download_nonprogressive(stream, 136, 140, 'mp4', tempDIR))
+                if stream.get_by_itag(298):
+                    merge_audio_video(title, '720p', 'mp4', download_nonprogressive(stream, 298, 140, 'mp4', tempDIR))
+                elif stream.get_by_itag(136):
+                    merge_audio_video(title, '720p', 'mp4', download_nonprogressive(stream, 136, 140, 'mp4', tempDIR))
 
             elif chosen_stream in ['480', '480p']:
                 merge_audio_video(title, '480p', 'mp4', download_nonprogressive(stream, 135, 140, 'mp4', tempDIR))
 
             elif chosen_stream in ['240', '240p']:
-                merge_audio_video(title, '240p', 'mp4', download_nonprogressive(stream, 133, 140, 'mp4', tempDIR))
+                merge_audio_video(title, '240p', 'mp4', download_nonprogressive(stream, 133, 139, 'mp4', tempDIR))
 
             elif chosen_stream in ['144', '144p']:
-                merge_audio_video(title, '144p', 'mp4', download_nonprogressive(stream, 160, 140, 'mp4', tempDIR))
+                merge_audio_video(title, '144p', 'mp4', download_nonprogressive(stream, 160, 139, 'mp4', tempDIR))
 
             elif chosen_stream in ['2160', '2160p', '4k']:
-                merge_audio_video(title, '4k', 'webm', download_nonprogressive(stream, 313, 251, 'webm', tempDIR))
+                if stream.get_by_itag(315):
+                    merge_audio_video(title, '4k', 'webm', download_nonprogressive(stream, 315, 251, 'webm', tempDIR))
+                elif stream.get_by_itag(313):
+                    merge_audio_video(title, '4k', 'webm', download_nonprogressive(stream, 313, 251, 'webm', tempDIR))
 
             elif chosen_stream in ['1440', '1440p', '2k']:
-                merge_audio_video(title, '2k', 'webm', download_nonprogressive(stream, 271, 251, 'webm', tempDIR))
+                if stream.get_by_itag(308):
+                    merge_audio_video(title, '2k', 'webm', download_nonprogressive(stream, 308, 251, 'webm', tempDIR))
+                elif stream.get_by_itag(271):
+                    merge_audio_video(title, '2k', 'webm', download_nonprogressive(stream, 271, 251, 'webm', tempDIR))
 
             elif chosen_stream == 'mp3':
                 convert_to_mp3(title, thumbnail, download_audio(stream, 140, tempDIR), author, video.title, author)
