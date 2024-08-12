@@ -37,7 +37,7 @@ pip install pytubepp
 **>> Install FFmpeg (If you haven't already!)**
 
 Linux (Ubuntu): `apt install ffmpeg`<br>
-Windows (using Chocolatey): `choco install ffmpeg`<br>
+Windows (10/11): `winget install ffmpeg`<br>
 MacOS (using Homebrew): `brew install ffmpeg`<br>
 Android (using Termux): `pkg install ffmpeg`
 
@@ -56,6 +56,7 @@ pytubepp "https://youtube.com/watch?v=2lAe1cqCOXo" -s 480p
 ```terminal
 pytubepp "https://youtube.com/watch?v=2lAe1cqCOXo" -s mp3
 ```
+* To cancel/stop an ongoing download press `CTRL` + `C` on keyboard.
 * List of all available flags are given below:
 
 | Flag | Usage | Requires Parameter | Requires URL | Parameters | Default |
