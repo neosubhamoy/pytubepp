@@ -241,6 +241,10 @@ def set_global_video_info(link):
         views = str(video.views)
         stream = video.streams
         stream_resolutions = {
+            '4320p': {
+                'allowed_streams': ['8k', '4320', '4320p'],
+                'message': ['4320p', '[8k, 4320, 4320p]']
+            },
             '2160p': {
                 'allowed_streams': ['4k', '2160', '2160p'],
                 'message': ['2160p', '[4k, 2160, 2160p]']
@@ -299,6 +303,14 @@ def show_video_info(link):
                 else:
                     matching_stream = next((s for s in stream if s.resolution == res), None)
                 if matching_stream is not None:
+                    if res == '4320p':
+                        type = matching_stream.mime_type
+                        filesize = f"{(matching_stream.filesize + stream.get_by_itag(140).filesize) / (1024 * 1024):.2f} MB"
+                        fps = f"{matching_stream.fps}fps"
+                        vdo_codec = matching_stream.video_codec
+                        ado_codec = stream.get_by_itag(140).audio_codec
+                        vdo_bitrate = f"{matching_stream.bitrate / 1024:.0f}kbps"
+                        ado_bitrate = stream.get_by_itag(140).abr
                     if res in ['2160p', '1440p']:
                         type = matching_stream.mime_type
                         filesize = f"{(matching_stream.filesize + stream.get_by_itag(251).filesize) / (1024 * 1024):.2f} MB"
@@ -381,6 +393,8 @@ def print_short_info(chosen_stream):
         print(f'\nVideo: {title}\nSelected Stream: 240p (LD)\n')
     elif chosen_stream in ['144', '144p']:
         print(f'\nVideo: {title}\nSelected Stream: 144p (LD)\n')
+    elif chosen_stream in ['4320', '4320p', '8k']:
+        print(f'\nVideo: {title}\nSelected Stream: 4320p (8K)\n')
     elif chosen_stream in ['2160', '2160p', '4k']:
         print(f'\nVideo: {title}\nSelected Stream: 2160p (4K)\n')
     elif chosen_stream in ['1440', '1440p', '2k']:
@@ -417,6 +431,9 @@ def download_stream(link, chosen_stream):
             elif chosen_stream in ['144', '144p']:
                 merge_audio_video(title, '144p', 'mp4', download_nonprogressive(stream, 160, 139, 'mp4', tempDIR))
 
+            elif chosen_stream in ['4320', '4320p', '8k']:
+                merge_audio_video(title, '8k', 'mp4', download_nonprogressive(stream, 571, 140, 'mp4', tempDIR))
+
             elif chosen_stream in ['2160', '2160p', '4k']:
                 if stream.get_by_itag(315):
                     merge_audio_video(title, '4k', 'webm', download_nonprogressive(stream, 315, 251, 'webm', tempDIR))
@@ -441,8 +458,8 @@ def main():
     parser = argparse.ArgumentParser(description=f'pytubePP (Pytube Post Processor) v{version} - A Simple CLI Tool to Download Your Favorite YouTube Videos Effortlessly!')
     parser.add_argument('url', nargs='?', default=None, help='url of the youtube video')
     parser.add_argument('-df', '--download-folder', default=argparse.SUPPRESS, help='set custom download folder path (default: ~/Downloads/Pytube Downloads) [arg eg: "/path/to/folder"]')
-    parser.add_argument('-ds', '--default-stream', default=argparse.SUPPRESS, help='set default download stream (default: max) [available arguments: 144p, 240p, 360p, 480p, 720p, 1080p, 1440p, 2160p, mp3, max]')
-    parser.add_argument('-s', '--stream', default=argparse.SUPPRESS, help='choose download stream for the current video (default: your chosen --default-stream) [available arguments: 144p, 240p, 360p, 480p, 720p, 1080p, 1440p, 2160p, 144, 240, 360, 480, 720, 1080, 1440, 2160, mp3, hd, fhd, 2k, 4k]')
+    parser.add_argument('-ds', '--default-stream', default=argparse.SUPPRESS, help='set default download stream (default: max) [available arguments: 144p, 240p, 360p, 480p, 720p, 1080p, 1440p, 2160p, 4320p, mp3, max]')
+    parser.add_argument('-s', '--stream', default=argparse.SUPPRESS, help='choose download stream for the current video (default: your chosen --default-stream) [available arguments: 144p, 240p, 360p, 480p, 720p, 1080p, 1440p, 2160p, 4320p, 144, 240, 360, 480, 720, 1080, 1440, 2160, 4320, mp3, hd, fhd, 2k, 4k, 8k]')
     parser.add_argument('-i', '--show-info', action='store_true', help='show video info (title, author, views and available_streams)')
     parser.add_argument('-sc', '--show-config', action='store_true', help='show all current user config settings')
     parser.add_argument('-r', '--reset-default', action='store_true', help='reset to default settings (download_folder and default_stream)')
@@ -514,7 +531,7 @@ def main():
 
         if 'default_stream' in args:
             if args.default_stream != defaultStream:
-                if args.default_stream in ['144p', '240p', '360p', '480p', '720p', '1080p', '1440p', '2160p', 'mp3', 'max']:
+                if args.default_stream in ['144p', '240p', '360p', '480p', '720p', '1080p', '1440p', '2160p', '4320p', 'mp3', 'max']:
                     update_config('defaultStream', args.default_stream)
                     print(f'\nDefault stream updated to: {args.default_stream}')
                 else:

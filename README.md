@@ -60,9 +60,9 @@ pytubepp "https://youtube.com/watch?v=2lAe1cqCOXo" -s mp3
 
 | Flag | Usage | Requires Parameter | Requires URL | Parameters | Default |
 | :--- | :---  | :---               | :---         | :---       | :---    |
-| -s | Choose preferred download stream | YES | YES | `144` `144p` `240` `240p` `360` `360p` `480` `480p` `720` `720p` `hd` `1080` `1080p` `fhd` `1440` `1440p` `2k` `2160` `2160p` `4k` `mp3` (Pass any one of them) | Your chosen Default Stream via `-ds` flag |
+| -s | Choose preferred download stream | YES | YES | `144` `144p` `240` `240p` `360` `360p` `480` `480p` `720` `720p` `hd` `1080` `1080p` `fhd` `1440` `1440p` `2k` `2160` `2160p` `4k` `4320` `4320p` `8k` `mp3` (Pass any one of them) | Your chosen Default Stream via `-ds` flag |
 | -i | Shows the video information like: Title, Author, Views, Available Download Streams | NO | YES | No parameters | No default |
-| -ds | Set default download stream | YES | NO | `144p` `240p` `360p` `480p` `720p` `1080p` `1440p` `2160p` `mp3` `max` (Pass any one of them) | `max` |
+| -ds | Set default download stream | YES | NO | `144p` `240p` `360p` `480p` `720p` `1080p` `1440p` `2160p` `4320p` `mp3` `max` (Pass any one of them) | `max` |
 | -df | Set custom download folder path | YES | NO | Use the full path excluding the last trailing slash within double quotes eg(in Linux): `"/path/to/folder"` (Make sure the folder path you enterted is already created and accessable) | Within `Pytube Downloads` folder in your System's `Downloads` folder |
 | -r | Reset to default configuration (Download Folder, Default Stream) | NO | NO | No parameters | No default |
 | -sc | Show all current user configurations | NO | NO | No parameters | No default |
