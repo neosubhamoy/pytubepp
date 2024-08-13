@@ -2,12 +2,13 @@ from pytubefix import YouTube
 from mutagen.id3 import ID3, APIC, TIT2, TPE1, TALB
 from tabulate import tabulate
 from tqdm import tqdm
-import appdirs, ffmpy, requests, re, os, sys, random, shutil, platform, json, argparse, tempfile, pkg_resources
+from importlib.metadata import version
+import appdirs, ffmpy, requests, re, os, sys, random, shutil, platform, json, argparse, tempfile
 
 def get_version():
     try:
-        return pkg_resources.get_distribution("pytubepp").version
-    except pkg_resources.DistributionNotFound:
+        return version('pytubepp')
+    except Exception as e:
         return "Unknown"
 
 def get_download_folder():
