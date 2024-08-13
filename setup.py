@@ -6,7 +6,7 @@ with open('README.md', 'r', encoding='utf8') as file:
 
 setup(
     name='pytubepp',
-    version='1.0.3',
+    version='1.0.4',
     description='A Simple CLI Tool to Download Your Favorite YouTube Videos Effortlessly!',
     long_description=readme,
     long_description_content_type='text/markdown',
