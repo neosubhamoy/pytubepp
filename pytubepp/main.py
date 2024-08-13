@@ -311,15 +311,75 @@ def show_video_info(link):
                         ado_codec = stream.get_by_itag(140).audio_codec
                         vdo_bitrate = f"{matching_stream.bitrate / 1024:.0f}kbps"
                         ado_bitrate = stream.get_by_itag(140).abr
-                    if res in ['2160p', '1440p']:
-                        type = matching_stream.mime_type
-                        filesize = f"{(matching_stream.filesize + stream.get_by_itag(251).filesize) / (1024 * 1024):.2f} MB"
-                        fps = f"{matching_stream.fps}fps"
-                        vdo_codec = matching_stream.video_codec
-                        ado_codec = stream.get_by_itag(251).audio_codec
-                        vdo_bitrate = f"{matching_stream.bitrate / 1024:.0f}kbps"
-                        ado_bitrate = stream.get_by_itag(251).abr
-                    elif res in ['1080p', '720p', '480p']:
+                    if res == '2160p':
+                        if stream.get_by_itag(701):
+                            type = stream.get_by_itag(701).mime_type
+                            filesize = f"{(stream.get_by_itag(701).filesize + stream.get_by_itag(140).filesize) / (1024 * 1024):.2f} MB"
+                            fps = f"{stream.get_by_itag(701).fps}fps"
+                            vdo_codec = stream.get_by_itag(701).video_codec
+                            ado_codec = stream.get_by_itag(140).audio_codec
+                            vdo_bitrate = f"{stream.get_by_itag(701).bitrate / 1024:.0f}kbps"
+                            ado_bitrate = stream.get_by_itag(140).abr
+                        else:
+                            type = matching_stream.mime_type
+                            filesize = f"{(matching_stream.filesize + stream.get_by_itag(251).filesize) / (1024 * 1024):.2f} MB"
+                            fps = f"{matching_stream.fps}fps"
+                            vdo_codec = matching_stream.video_codec
+                            ado_codec = stream.get_by_itag(251).audio_codec
+                            vdo_bitrate = f"{matching_stream.bitrate / 1024:.0f}kbps"
+                            ado_bitrate = stream.get_by_itag(251).abr
+                    elif res == '1440p':
+                        if stream.get_by_itag(700):
+                            type = stream.get_by_itag(700).mime_type
+                            filesize = f"{(stream.get_by_itag(700).filesize + stream.get_by_itag(140).filesize) / (1024 * 1024):.2f} MB"
+                            fps = f"{stream.get_by_itag(700).fps}fps"
+                            vdo_codec = stream.get_by_itag(700).video_codec
+                            ado_codec = stream.get_by_itag(140).audio_codec
+                            vdo_bitrate = f"{stream.get_by_itag(700).bitrate / 1024:.0f}kbps"
+                            ado_bitrate = stream.get_by_itag(140).abr
+                        else:
+                            type = matching_stream.mime_type
+                            filesize = f"{(matching_stream.filesize + stream.get_by_itag(251).filesize) / (1024 * 1024):.2f} MB"
+                            fps = f"{matching_stream.fps}fps"
+                            vdo_codec = matching_stream.video_codec
+                            ado_codec = stream.get_by_itag(251).audio_codec
+                            vdo_bitrate = f"{matching_stream.bitrate / 1024:.0f}kbps"
+                            ado_bitrate = stream.get_by_itag(251).abr
+                    elif res == '1080p':
+                        if stream.get_by_itag(699):
+                            type = stream.get_by_itag(699).mime_type
+                            filesize = f"{(stream.get_by_itag(699).filesize + stream.get_by_itag(140).filesize) / (1024 * 1024):.2f} MB"
+                            fps = f"{stream.get_by_itag(699).fps}fps"
+                            vdo_codec = stream.get_by_itag(699).video_codec
+                            ado_codec = stream.get_by_itag(140).audio_codec
+                            vdo_bitrate = f"{stream.get_by_itag(699).bitrate / 1024:.0f}kbps"
+                            ado_bitrate = stream.get_by_itag(140).abr
+                        else:
+                            type = matching_stream.mime_type
+                            filesize = f"{(matching_stream.filesize + stream.get_by_itag(140).filesize) / (1024 * 1024):.2f} MB"
+                            fps = f"{matching_stream.fps}fps"
+                            vdo_codec = matching_stream.video_codec
+                            ado_codec = stream.get_by_itag(140).audio_codec
+                            vdo_bitrate = f"{matching_stream.bitrate / 1024:.0f}kbps"
+                            ado_bitrate = stream.get_by_itag(140).abr
+                    elif res == '720p':
+                        if stream.get_by_itag(698):
+                            type = stream.get_by_itag(698).mime_type
+                            filesize = f"{(stream.get_by_itag(698).filesize + stream.get_by_itag(140).filesize) / (1024 * 1024):.2f} MB"
+                            fps = f"{stream.get_by_itag(698).fps}fps"
+                            vdo_codec = stream.get_by_itag(698).video_codec
+                            ado_codec = stream.get_by_itag(140).audio_codec
+                            vdo_bitrate = f"{stream.get_by_itag(698).bitrate / 1024:.0f}kbps"
+                            ado_bitrate = stream.get_by_itag(140).abr
+                        else:
+                            type = matching_stream.mime_type
+                            filesize = f"{(matching_stream.filesize + stream.get_by_itag(140).filesize) / (1024 * 1024):.2f} MB"
+                            fps = f"{matching_stream.fps}fps"
+                            vdo_codec = matching_stream.video_codec
+                            ado_codec = stream.get_by_itag(140).audio_codec
+                            vdo_bitrate = f"{matching_stream.bitrate / 1024:.0f}kbps"
+                            ado_bitrate = stream.get_by_itag(140).abr
+                    elif res == '480p':
                         type = matching_stream.mime_type
                         filesize = f"{(matching_stream.filesize + stream.get_by_itag(140).filesize) / (1024 * 1024):.2f} MB"
                         fps = f"{matching_stream.fps}fps"
@@ -362,7 +422,7 @@ def show_video_info(link):
             sys.exit()
 
         print(f'\nTitle: {video.title}\nAuthor: {author}\nViews: {views}\n')
-        print(tabulate(table, headers=['Stream', 'Alias', 'Format', 'Size', 'FrameRate', 'V-Codec', 'A-Codec', 'V-BitRate', 'A-BitRate']))
+        print(tabulate(table, headers=['Stream', 'Alias (for -s flag)', 'Format', 'Size', 'FrameRate', 'V-Codec', 'A-Codec', 'V-BitRate', 'A-BitRate']))
         print('\n')
     else:
         print('\nInvalid video link! Please enter a valid video url...!!')
@@ -411,13 +471,17 @@ def download_stream(link, chosen_stream):
                 download_progressive(stream, 18, title, '360p', 'mp4')
 
             elif chosen_stream in ['1080', '1080p', 'fhd']:
-                if stream.get_by_itag(299):
+                if stream.get_by_itag(699):
+                    merge_audio_video(title, '1080p', 'mp4', download_nonprogressive(stream, 699, 140, 'mp4', tempDIR))
+                elif stream.get_by_itag(299):
                     merge_audio_video(title, '1080p', 'mp4', download_nonprogressive(stream, 299, 140, 'mp4', tempDIR))
                 elif stream.get_by_itag(137):
                     merge_audio_video(title, '1080p', 'mp4', download_nonprogressive(stream, 137, 140, 'mp4', tempDIR))
 
             elif chosen_stream in ['720', '720p', 'hd']:
-                if stream.get_by_itag(298):
+                if stream.get_by_itag(698):
+                    merge_audio_video(title, '720p', 'mp4', download_nonprogressive(stream, 698, 140, 'mp4', tempDIR))
+                elif stream.get_by_itag(298):
                     merge_audio_video(title, '720p', 'mp4', download_nonprogressive(stream, 298, 140, 'mp4', tempDIR))
                 elif stream.get_by_itag(136):
                     merge_audio_video(title, '720p', 'mp4', download_nonprogressive(stream, 136, 140, 'mp4', tempDIR))
@@ -432,16 +496,23 @@ def download_stream(link, chosen_stream):
                 merge_audio_video(title, '144p', 'mp4', download_nonprogressive(stream, 160, 139, 'mp4', tempDIR))
 
             elif chosen_stream in ['4320', '4320p', '8k']:
-                merge_audio_video(title, '8k', 'mp4', download_nonprogressive(stream, 571, 140, 'mp4', tempDIR))
+                if stream.get_by_itag(702):
+                    merge_audio_video(title, '8k', 'mp4', download_nonprogressive(stream, 702, 140, 'mp4', tempDIR))
+                elif stream.get_by_itag(571):
+                    merge_audio_video(title, '8k', 'mp4', download_nonprogressive(stream, 571, 140, 'mp4', tempDIR))
 
             elif chosen_stream in ['2160', '2160p', '4k']:
-                if stream.get_by_itag(315):
+                if stream.get_by_itag(701):
+                    merge_audio_video(title, '4k', 'mp4', download_nonprogressive(stream, 701, 140, 'mp4', tempDIR))
+                elif stream.get_by_itag(315):
                     merge_audio_video(title, '4k', 'webm', download_nonprogressive(stream, 315, 251, 'webm', tempDIR))
                 elif stream.get_by_itag(313):
                     merge_audio_video(title, '4k', 'webm', download_nonprogressive(stream, 313, 251, 'webm', tempDIR))
 
             elif chosen_stream in ['1440', '1440p', '2k']:
-                if stream.get_by_itag(308):
+                if stream.get_by_itag(700):
+                    merge_audio_video(title, '2k', 'mp4', download_nonprogressive(stream, 700, 140, 'mp4', tempDIR))
+                elif stream.get_by_itag(308):
                     merge_audio_video(title, '2k', 'webm', download_nonprogressive(stream, 308, 251, 'webm', tempDIR))
                 elif stream.get_by_itag(271):
                     merge_audio_video(title, '2k', 'webm', download_nonprogressive(stream, 271, 251, 'webm', tempDIR))
