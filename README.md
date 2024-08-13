@@ -11,6 +11,7 @@
 
 ### **🏷️ Features**
 * Auto Post-Process & Merge YouTube DASH Streams
+* Supports upto 8K 60fps HDR Stream Download
 * Supports MP3 Download (with Embeded Thumbnail and Tags)
 * Smart Stream Selection
 * Highly Configurable and Many More 😉
@@ -56,7 +57,11 @@ pytubepp "https://youtube.com/watch?v=2lAe1cqCOXo" -s 480p
 ```terminal
 pytubepp "https://youtube.com/watch?v=2lAe1cqCOXo" -s mp3
 ```
-* To cancel/stop an ongoing download press `CTRL` + `C` on keyboard.
+* To fetch the video information the command will be:
+```terminal
+pytubepp "https://youtube.com/watch?v=2lAe1cqCOXo" -i
+```
+* To cancel/stop an ongoing download press `CTRL` + `C` on keyboard (it is recommended to run the `-ct` flag once after canceling an ongoing download).
 * List of all available flags are given below:
 
 | Flag | Usage | Requires Parameter | Requires URL | Parameters | Default |
