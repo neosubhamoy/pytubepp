@@ -621,7 +621,7 @@ def main():
             print(f'\ndownloadDIR: {downloadDIR}\ntempDIR: {tempDIR}\nconfigDIR: {configDIR}\ndefaultStream: {defaultStream}\n')
 
         if args.version:
-            print(f'\npytubePP (Pytube Post Processor) - version: {version}\n')
+            print(f'pytubepp {version}')
 
         if args.show_info:
             print('\nNo video url supplied! exiting...!!')
