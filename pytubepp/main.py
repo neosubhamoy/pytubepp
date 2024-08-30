@@ -3,7 +3,16 @@ from mutagen.id3 import ID3, APIC, TIT2, TPE1, TALB
 from tabulate import tabulate
 from tqdm import tqdm
 from importlib.metadata import version
-import appdirs, ffmpy, requests, re, os, sys, random, shutil, platform, json, argparse, tempfile
+import appdirs, ffmpy, requests, re, os, sys, random, shutil, platform, json, argparse, tempfile, subprocess
+
+def network_available():
+    try:
+        param = '-n' if platform.system().lower() == 'windows' else '-c'
+        command = ['ping', param, '1', 'youtube.com']
+        subprocess.run(command, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, check=True)
+        return True
+    except subprocess.CalledProcessError:
+        return False
 
 def get_version():
     try:
@@ -232,6 +241,10 @@ def is_valid_url(url):
     return match
 
 def set_global_video_info(link):
+    if not network_available():
+        print('\nRequest timeout! Please check your network and try again...!!')
+        sys.exit()
+    
     if is_valid_url(link):
         global video, author, title, thumbnail, views, stream, stream_resolutions, maxres
         link = is_valid_url(link).group(1)
