@@ -1,4 +1,4 @@
-# pytubePP - (Pytube Post Processor)
+# PytubePP - (Pytube Post Processor)
 
 ### A Simple CLI Tool to Download Your Favourite YouTube Videos Effortlessly!
 
@@ -8,6 +8,7 @@
 [![builds](https://img.shields.io/badge/builds-passing-brightgreen.svg?style=flat)](https://github.com/neosubhamoy/pytubepp/)
 [![PRs](https://img.shields.io/badge/PRs-welcome-blue.svg?style=flat)](https://github.com/neosubhamoy/pytubepp/)
 
+😀 GOOD NEWS: If you are Windows(10/11) user and don't want to bother remembering PytubePP Commands! (You are not familier with Command Line Tools). We recently released a Browser Extension that can auto detect YouTube Videos and You can download the Video in one click directly from the browser using PytubePP CLI. Install [PytubePP Helper](https://github.com/neosubhamoy/pytubepp-helper) app in your Computer and add [PytubePP Extension](https://github.com/neosubhamoy/pytubepp-extension) in your Browser to get started.
 
 ### **🏷️ Features**
 * Auto Post-Process & Merge YouTube DASH Streams
