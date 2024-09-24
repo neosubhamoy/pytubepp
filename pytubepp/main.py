@@ -94,7 +94,7 @@ def merge_audio_video(title, resolution, file_extention, random_filename, tempDI
     ff.run(stdout=devnull, stderr=devnull)
     devnull.close()
 
-    os.rename(output_temp_file, output_file)
+    shutil.move(output_temp_file, output_file)
     postprocess_cleanup(tempDIR, ['_vdo.' + file_extention, '_ado.' + file_extention, '_merged.' + file_extention], random_filename)
     print('Done! 🎉')
 
@@ -142,7 +142,7 @@ def convert_to_mp3(title, thumbnail_url, random_filename, mp3_artist='Unknown', 
         ))
     audio.save()
 
-    os.rename(output_temp_file, output_file)
+    shutil.move(output_temp_file, output_file)
     postprocess_cleanup(tempDIR, ['_thumbnail.jpg', '_thumbnail.mp4', '_ado.mp4', '_merged.mp4'], random_filename)
     print('Done! 🎉')
 
@@ -157,7 +157,7 @@ def download_progressive(stream, itag, title, resolution, file_extention, tempDI
     output_file = os.path.join(downloadDIR, get_unique_filename(title + '_' + resolution + '.' + file_extention))
     selected_vdo.download(output_path=tempDIR, filename=filename)
     print('Processing...')
-    os.rename(output_temp_file, output_file)
+    shutil.move(output_temp_file, output_file)
     print('Done! 🎉')
 
 def download_nonprogressive(stream, itag_vdo, itag_ado, file_extention, output_path):
