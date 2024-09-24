@@ -8,7 +8,7 @@
 [![builds](https://img.shields.io/badge/builds-passing-brightgreen.svg?style=flat)](https://github.com/neosubhamoy/pytubepp/)
 [![PRs](https://img.shields.io/badge/PRs-welcome-blue.svg?style=flat)](https://github.com/neosubhamoy/pytubepp/)
 
-😀 GOOD NEWS: If you are Windows(10/11) user and don't want to bother remembering PytubePP Commands! (You are not familier with Command Line Tools). We recently released a Browser Extension that can auto detect YouTube Videos and You can download the Video in one click directly from the browser using PytubePP CLI. Install [PytubePP Helper](https://github.com/neosubhamoy/pytubepp-helper) app in your Computer and add [PytubePP Extension](https://github.com/neosubhamoy/pytubepp-extension) in your Browser to get started.
+😀 GOOD NEWS: If you are Windows(10/11) user and don't want to bother remembering PytubePP Commands! (You are not familier with Command Line Tools). We recently released a Browser Extension that can auto detect YouTube Videos and You can download the Video in one click directly from the browser using PytubePP CLI. Install [PytubePP Helper](https://github.com/neosubhamoy/pytubepp-helper) app in your System and add [PytubePP Extension](https://github.com/neosubhamoy/pytubepp-extension) in your Browser to get started.
 
 ### **🏷️ Features**
 * Auto Post-Process & Merge YouTube DASH Streams
@@ -29,23 +29,29 @@
 * [setuptools](https://pypi.org/project/setuptools/)
 
 ### **🛠️ Installation**
-You can install pytubePP in your system via PIP by simply running the below command
+You can install PytubePP in your system via PIP by simply running the below command
 
 ```terminal
 pip install pytubepp
 ```
-**IMPORTANT: Before installing pytubePP make sure FFmpeg is installed in your system and accesable via your cli interface (FFmpeg is Must Required as some of the core features of pytubePP relies on FFmpeg, but due to security reasons we can not ship it with the module)**
+**IMPORTANT: Before installing PytubePP make sure FFmpeg is installed in your system and accesable via your cli interface (FFmpeg is Must Required as some of the core features of pytubePP relies on FFmpeg, but due to security reasons we can not ship it with the module)**
 
 **>> Install FFmpeg (If you haven't already!)**
 
-Linux (Ubuntu): `apt install ffmpeg`<br>
+Linux (Ubuntu): `sudo apt install ffmpeg`<br>
+Linux (Fedora): `sudo dnf install ffmpeg-free`<br>
 Windows (10/11): `winget install ffmpeg`<br>
 MacOS (using Homebrew): `brew install ffmpeg`<br>
 Android (using Termux): `pkg install ffmpeg`
 
+**NOTE: Always make sure 'PytubePP' and 'Pytubefix' is on the latest version to avoid issues (update them at least once a week) (Use the command below to update)**
+```
+pip install pytubefix pytubepp --upgrade
+```
+
 ### **📌 Commands and Flags**
-Using pytubePP is as simple as just supplying it only the YouTube video url as argument!
-** Before Starting Please NOTE: pytubePP follows a simple rule - "Use the Default Download Configuration if No Flags are Passed"
+Using PytubePP is as simple as just supplying it only the YouTube video url as argument!
+** Before Starting Please NOTE: PytubePP follows a simple rule - "Use the Default Download Configuration if No Flags are Passed"
 * To download a video in maximum available resolution the command will look like:
 ```terminal
 pytubepp "https://youtube.com/watch?v=2lAe1cqCOXo"
@@ -80,7 +86,7 @@ pytubepp "https://youtube.com/watch?v=2lAe1cqCOXo" -i
 
 ### 📝 License & Usage
 
-pytubePP - (Pytube Post Processor) is a Fully Open Sourced Project licensed under MIT License. Anyone can view, modify, use (personal and commercial) or distribute it's sources without any attribution and extra permissions.
+PytubePP - (Pytube Post Processor) is a Fully Open Sourced Project licensed under MIT License. Anyone can view, modify, use (personal and commercial) or distribute it's sources without any attribution and extra permissions.
 
 **🌟 Liked this project? Please consider giving it a star to show me your appreciation**
 <br></br>
