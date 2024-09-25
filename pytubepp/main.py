@@ -435,9 +435,195 @@ def show_video_info(link):
             print('Sorry, No video streams found....!!!')
             sys.exit()
 
-        print(f'\nTitle: {video.title}\nAuthor: {author}\nViews: {views}\n')
+        print(f'\nTitle: {video.title}\nAuthor: {author}\nPublished On: {video.publish_date.strftime('%d/%m/%Y')}\nDuration: {video.length}\nViews: {views}\n')
         print(tabulate(table, headers=['Stream', 'Alias (for -s flag)', 'Format', 'Size', 'FrameRate', 'V-Codec', 'A-Codec', 'V-BitRate', 'A-BitRate']))
         print('\n')
+    else:
+        print('\nInvalid video link! Please enter a valid video url...!!')
+
+def show_raw_info(link, prettify=False):
+    if set_global_video_info(link):
+        streams_list = []
+        found = False
+
+        for res in stream_resolutions.keys():
+            if found or (res not in ['mp3'] and stream.filter(res=res)) or (res == 'mp3' and stream.get_by_itag(140)):
+                found = True
+                if res == 'mp3':
+                    matching_stream = stream.get_by_itag(140)
+                else:
+                    matching_stream = next((s for s in stream if s.resolution == res), None)
+                if matching_stream is not None:
+                    if res == '4320p':
+                        itag = matching_stream.itag
+                        resolution = '4320p'
+                        type = matching_stream.mime_type
+                        filesize = f"{(matching_stream.filesize + stream.get_by_itag(140).filesize) / (1024 * 1024):.2f} MB"
+                        fps = f"{matching_stream.fps}fps"
+                        vdo_codec = matching_stream.video_codec
+                        ado_codec = stream.get_by_itag(140).audio_codec
+                        vdo_bitrate = f"{matching_stream.bitrate / 1024:.0f}kbps"
+                        ado_bitrate = stream.get_by_itag(140).abr
+                    if res == '2160p':
+                        resolution = '2160p'
+                        if stream.get_by_itag(701):
+                            itag = '701'
+                            type = stream.get_by_itag(701).mime_type
+                            filesize = f"{(stream.get_by_itag(701).filesize + stream.get_by_itag(140).filesize) / (1024 * 1024):.2f} MB"
+                            fps = f"{stream.get_by_itag(701).fps}fps"
+                            vdo_codec = stream.get_by_itag(701).video_codec
+                            ado_codec = stream.get_by_itag(140).audio_codec
+                            vdo_bitrate = f"{stream.get_by_itag(701).bitrate / 1024:.0f}kbps"
+                            ado_bitrate = stream.get_by_itag(140).abr
+                        else:
+                            itag = matching_stream.itag
+                            type = matching_stream.mime_type
+                            filesize = f"{(matching_stream.filesize + stream.get_by_itag(251).filesize) / (1024 * 1024):.2f} MB"
+                            fps = f"{matching_stream.fps}fps"
+                            vdo_codec = matching_stream.video_codec
+                            ado_codec = stream.get_by_itag(251).audio_codec
+                            vdo_bitrate = f"{matching_stream.bitrate / 1024:.0f}kbps"
+                            ado_bitrate = stream.get_by_itag(251).abr
+                    elif res == '1440p':
+                        resolution = '1440p'
+                        if stream.get_by_itag(700):
+                            itag = '700'
+                            type = stream.get_by_itag(700).mime_type
+                            filesize = f"{(stream.get_by_itag(700).filesize + stream.get_by_itag(140).filesize) / (1024 * 1024):.2f} MB"
+                            fps = f"{stream.get_by_itag(700).fps}fps"
+                            vdo_codec = stream.get_by_itag(700).video_codec
+                            ado_codec = stream.get_by_itag(140).audio_codec
+                            vdo_bitrate = f"{stream.get_by_itag(700).bitrate / 1024:.0f}kbps"
+                            ado_bitrate = stream.get_by_itag(140).abr
+                        else:
+                            itag = matching_stream.itag
+                            type = matching_stream.mime_type
+                            filesize = f"{(matching_stream.filesize + stream.get_by_itag(251).filesize) / (1024 * 1024):.2f} MB"
+                            fps = f"{matching_stream.fps}fps"
+                            vdo_codec = matching_stream.video_codec
+                            ado_codec = stream.get_by_itag(251).audio_codec
+                            vdo_bitrate = f"{matching_stream.bitrate / 1024:.0f}kbps"
+                            ado_bitrate = stream.get_by_itag(251).abr
+                    elif res == '1080p':
+                        resolution = '1080p'
+                        if stream.get_by_itag(699):
+                            itag = '699'
+                            type = stream.get_by_itag(699).mime_type
+                            filesize = f"{(stream.get_by_itag(699).filesize + stream.get_by_itag(140).filesize) / (1024 * 1024):.2f} MB"
+                            fps = f"{stream.get_by_itag(699).fps}fps"
+                            vdo_codec = stream.get_by_itag(699).video_codec
+                            ado_codec = stream.get_by_itag(140).audio_codec
+                            vdo_bitrate = f"{stream.get_by_itag(699).bitrate / 1024:.0f}kbps"
+                            ado_bitrate = stream.get_by_itag(140).abr
+                        else:
+                            itag = matching_stream.itag
+                            type = matching_stream.mime_type
+                            filesize = f"{(matching_stream.filesize + stream.get_by_itag(140).filesize) / (1024 * 1024):.2f} MB"
+                            fps = f"{matching_stream.fps}fps"
+                            vdo_codec = matching_stream.video_codec
+                            ado_codec = stream.get_by_itag(140).audio_codec
+                            vdo_bitrate = f"{matching_stream.bitrate / 1024:.0f}kbps"
+                            ado_bitrate = stream.get_by_itag(140).abr
+                    elif res == '720p':
+                        resolution = '720p'
+                        if stream.get_by_itag(698):
+                            itag = '698'
+                            type = stream.get_by_itag(698).mime_type
+                            filesize = f"{(stream.get_by_itag(698).filesize + stream.get_by_itag(140).filesize) / (1024 * 1024):.2f} MB"
+                            fps = f"{stream.get_by_itag(698).fps}fps"
+                            vdo_codec = stream.get_by_itag(698).video_codec
+                            ado_codec = stream.get_by_itag(140).audio_codec
+                            vdo_bitrate = f"{stream.get_by_itag(698).bitrate / 1024:.0f}kbps"
+                            ado_bitrate = stream.get_by_itag(140).abr
+                        else:
+                            itag = matching_stream.itag
+                            type = matching_stream.mime_type
+                            filesize = f"{(matching_stream.filesize + stream.get_by_itag(140).filesize) / (1024 * 1024):.2f} MB"
+                            fps = f"{matching_stream.fps}fps"
+                            vdo_codec = matching_stream.video_codec
+                            ado_codec = stream.get_by_itag(140).audio_codec
+                            vdo_bitrate = f"{matching_stream.bitrate / 1024:.0f}kbps"
+                            ado_bitrate = stream.get_by_itag(140).abr
+                    elif res == '480p':
+                        itag = matching_stream.itag
+                        resolution = '480p'
+                        type = matching_stream.mime_type
+                        filesize = f"{(matching_stream.filesize + stream.get_by_itag(140).filesize) / (1024 * 1024):.2f} MB"
+                        fps = f"{matching_stream.fps}fps"
+                        vdo_codec = matching_stream.video_codec
+                        ado_codec = stream.get_by_itag(140).audio_codec
+                        vdo_bitrate = f"{matching_stream.bitrate / 1024:.0f}kbps"
+                        ado_bitrate = stream.get_by_itag(140).abr
+                    elif res == '360p':
+                        itag = matching_stream.itag
+                        resolution = '360p'
+                        type = matching_stream.mime_type
+                        filesize = f"{matching_stream.filesize / (1024 * 1024):.2f} MB"
+                        fps = f"{matching_stream.fps}fps"
+                        vdo_codec = matching_stream.video_codec
+                        ado_codec = matching_stream.audio_codec
+                        vdo_bitrate = f"{matching_stream.bitrate / 1024:.0f}kbps"
+                        ado_bitrate = matching_stream.abr
+                    elif res in ['240p', '144p']:
+                        itag = matching_stream.itag
+                        resolution = res
+                        type = matching_stream.mime_type
+                        filesize = f"{(matching_stream.filesize + stream.get_by_itag(139).filesize) / (1024 * 1024):.2f} MB"
+                        fps = f"{matching_stream.fps}fps"
+                        vdo_codec = matching_stream.video_codec
+                        ado_codec = stream.get_by_itag(139).audio_codec
+                        vdo_bitrate = f"{matching_stream.bitrate / 1024:.0f}kbps"
+                        ado_bitrate = stream.get_by_itag(139).abr
+                    elif res == 'mp3':
+                        itag = matching_stream.itag
+                        resolution = 'mp3'
+                        type = "audio/mp3"
+                        filesize = f"{matching_stream.filesize / (1024 * 1024):.2f} MB"
+                        fps = "none"
+                        vdo_codec = "none"
+                        ado_codec = matching_stream.audio_codec
+                        vdo_bitrate = "none"
+                        ado_bitrate = matching_stream.abr
+
+                else:
+                    filesize = "N/A"
+                current_stream = {
+                    'itag': str(itag),
+                    'res': resolution,
+                    'mime_type': type,
+                    'file_size': filesize,
+                    'fps': fps,
+                    'vcodec': vdo_codec,
+                    'acodec': ado_codec,
+                    'vbitrate': vdo_bitrate,
+                    'abitrate': ado_bitrate
+                }
+                streams_list.append(current_stream)
+
+        if not found:
+            print('Sorry, No video streams found....!!!')
+            sys.exit()
+
+        if prettify:
+            print(json.dumps({
+            'title': video.title,
+            'author': author,
+            'thumbnail_url': thumbnail,
+            'views': views,
+            'published_on': video.publish_date.strftime('%d/%m/%Y'),
+            'duration': str(video.length),
+            'streams': streams_list,
+            }, indent=4))
+        else:
+            print(json.dumps({
+                'title': video.title,
+                'author': author,
+                'thumbnail_url': thumbnail,
+                'views': views,
+                'published_on': video.publish_date.strftime('%d/%m/%Y'),
+                'duration': str(video.length),
+                'streams': streams_list,
+            }))
     else:
         print('\nInvalid video link! Please enter a valid video url...!!')
 
@@ -546,6 +732,8 @@ def main():
     parser.add_argument('-ds', '--default-stream', default=argparse.SUPPRESS, help='set default download stream (default: max) [available arguments: 144p, 240p, 360p, 480p, 720p, 1080p, 1440p, 2160p, 4320p, mp3, max]')
     parser.add_argument('-s', '--stream', default=argparse.SUPPRESS, help='choose download stream for the current video (default: your chosen --default-stream) [available arguments: 144p, 240p, 360p, 480p, 720p, 1080p, 1440p, 2160p, 4320p, 144, 240, 360, 480, 720, 1080, 1440, 2160, 4320, mp3, hd, fhd, 2k, 4k, 8k]')
     parser.add_argument('-i', '--show-info', action='store_true', help='show video info (title, author, views and available_streams)')
+    parser.add_argument('-ri', '--raw-info', action='store_true', help='show video info in raw json format')
+    parser.add_argument('-jp', '--json-prettify', action='store_true', help='show json in prettified indented view')
     parser.add_argument('-sc', '--show-config', action='store_true', help='show all current user config settings')
     parser.add_argument('-r', '--reset-default', action='store_true', help='reset to default settings (download_folder and default_stream)')
     parser.add_argument('-ct', '--clear-temp', action='store_true', help='clear temporary files (audio, video, thumbnail files of the failed, incomplete downloads)')
@@ -576,10 +764,19 @@ def main():
         if args.show_info:
             show_video_info(args.url)
         
+        if args.raw_info:
+            if args.json_prettify:
+                show_raw_info(args.url, True)
+            else:
+                show_raw_info(args.url)
+
+        if args.json_prettify and not args.raw_info:
+            print('\nMissing flag! -jp flag must be used with a flag which returns json data...!! (eg: -ri)')
+        
         if 'stream' in args:
             download_stream(args.url, args.stream)
             
-        if 'stream' not in args and not args.show_info:
+        if 'stream' not in args and not args.show_info and not args.raw_info and not args.json_prettify:
             if set_global_video_info(args.url):
                 if defaultStream == 'max' and maxres != None:
                     download_stream(args.url, maxres)
@@ -638,6 +835,12 @@ def main():
 
         if args.show_info:
             print('\nNo video url supplied! exiting...!!')
+
+        if args.raw_info:
+            print('\nNo video url supplied! exiting...!!')
+
+        if args.json_prettify and not args.raw_info:
+            print('\nMissing flag! -jp flag must be used with a flag which returns json data...!! (eg: -ri)')
 
         if 'stream' in args:
             print('\nNo video url supplied! exiting...!!')
