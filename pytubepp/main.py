@@ -250,7 +250,7 @@ def set_global_video_info(link):
         link = is_valid_url(link).group(1)
         video = YouTube(link, 'ANDROID_VR', on_progress_callback=progress)
         author = video.author
-        title = re.sub(r'[\\/*?:"<>|]', '_', author + '-' + video.title)
+        title = re.sub(r'[\\/*?:"<>|]', '_', author + ' - ' + video.title)
         thumbnail = video.thumbnail_url
         views = str(video.views)
         stream = video.streams
