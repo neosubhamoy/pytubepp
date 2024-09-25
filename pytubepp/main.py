@@ -23,11 +23,11 @@ def get_version():
 def get_download_folder():
     system = platform.system()
     if system in ["Windows", "Darwin", "Linux"]:
-        cli_download_dir = os.path.join(os.path.expanduser("~"), "Downloads", "Pytube Downloads")
+        cli_download_dir = os.path.join(os.path.expanduser("~"), "Downloads", "PytubePP Downloads")
         os.makedirs(cli_download_dir, exist_ok=True)
         return cli_download_dir
     else:
-        cli_download_dir = os.path.join(appdirs.user_download_dir(), "Pytube Downloads")
+        cli_download_dir = os.path.join(appdirs.user_download_dir(), "PytubePP Downloads")
         os.makedirs(cli_download_dir, exist_ok=True)
         return cli_download_dir
     
