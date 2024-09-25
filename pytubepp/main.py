@@ -319,7 +319,7 @@ def show_video_info(link):
                 if matching_stream is not None:
                     if res == '4320p':
                         type = matching_stream.mime_type
-                        filesize = f"{(matching_stream.filesize + stream.get_by_itag(140).filesize) / (1024 * 1024):.2f} MB"
+                        filesize = f"{(matching_stream.filesize + stream.get_by_itag(140).filesize) / (1024 * 1024 * 1024):.2f} GB" if matching_stream.filesize + stream.get_by_itag(140).filesize >= 1073741824 else f"{(matching_stream.filesize + stream.get_by_itag(140).filesize) / (1024 * 1024):.2f} MB"
                         fps = f"{matching_stream.fps}fps"
                         vdo_codec = matching_stream.video_codec
                         ado_codec = stream.get_by_itag(140).audio_codec
@@ -328,7 +328,7 @@ def show_video_info(link):
                     if res == '2160p':
                         if stream.get_by_itag(701):
                             type = stream.get_by_itag(701).mime_type
-                            filesize = f"{(stream.get_by_itag(701).filesize + stream.get_by_itag(140).filesize) / (1024 * 1024):.2f} MB"
+                            filesize = f"{(stream.get_by_itag(701).filesize + stream.get_by_itag(140).filesize) / (1024 * 1024 * 1024):.2f} GB" if stream.get_by_itag(701).filesize + stream.get_by_itag(140).filesize >= 1073741824 else f"{(stream.get_by_itag(701).filesize + stream.get_by_itag(140).filesize) / (1024 * 1024):.2f} MB"
                             fps = f"{stream.get_by_itag(701).fps}fps"
                             vdo_codec = stream.get_by_itag(701).video_codec
                             ado_codec = stream.get_by_itag(140).audio_codec
@@ -336,7 +336,7 @@ def show_video_info(link):
                             ado_bitrate = stream.get_by_itag(140).abr
                         else:
                             type = matching_stream.mime_type
-                            filesize = f"{(matching_stream.filesize + stream.get_by_itag(251).filesize) / (1024 * 1024):.2f} MB"
+                            filesize = f"{(matching_stream.filesize + stream.get_by_itag(251).filesize) / (1024 * 1024 * 1024):.2f} GB" if matching_stream.filesize + stream.get_by_itag(251).filesize >= 1073741824 else f"{(matching_stream.filesize + stream.get_by_itag(251).filesize) / (1024 * 1024):.2f} MB"
                             fps = f"{matching_stream.fps}fps"
                             vdo_codec = matching_stream.video_codec
                             ado_codec = stream.get_by_itag(251).audio_codec
@@ -345,7 +345,7 @@ def show_video_info(link):
                     elif res == '1440p':
                         if stream.get_by_itag(700):
                             type = stream.get_by_itag(700).mime_type
-                            filesize = f"{(stream.get_by_itag(700).filesize + stream.get_by_itag(140).filesize) / (1024 * 1024):.2f} MB"
+                            filesize = f"{(stream.get_by_itag(700).filesize + stream.get_by_itag(140).filesize) / (1024 * 1024 * 1024):.2f} GB" if stream.get_by_itag(700).filesize + stream.get_by_itag(140).filesize >= 1073741824 else f"{(stream.get_by_itag(700).filesize + stream.get_by_itag(140).filesize) / (1024 * 1024):.2f} MB"
                             fps = f"{stream.get_by_itag(700).fps}fps"
                             vdo_codec = stream.get_by_itag(700).video_codec
                             ado_codec = stream.get_by_itag(140).audio_codec
@@ -353,7 +353,7 @@ def show_video_info(link):
                             ado_bitrate = stream.get_by_itag(140).abr
                         else:
                             type = matching_stream.mime_type
-                            filesize = f"{(matching_stream.filesize + stream.get_by_itag(251).filesize) / (1024 * 1024):.2f} MB"
+                            filesize = f"{(matching_stream.filesize + stream.get_by_itag(251).filesize) / (1024 * 1024 * 1024):.2f} GB" if matching_stream.filesize + stream.get_by_itag(251).filesize >= 1073741824 else f"{(matching_stream.filesize + stream.get_by_itag(251).filesize) / (1024 * 1024):.2f} MB"
                             fps = f"{matching_stream.fps}fps"
                             vdo_codec = matching_stream.video_codec
                             ado_codec = stream.get_by_itag(251).audio_codec
@@ -362,7 +362,7 @@ def show_video_info(link):
                     elif res == '1080p':
                         if stream.get_by_itag(699):
                             type = stream.get_by_itag(699).mime_type
-                            filesize = f"{(stream.get_by_itag(699).filesize + stream.get_by_itag(140).filesize) / (1024 * 1024):.2f} MB"
+                            filesize = f"{(stream.get_by_itag(699).filesize + stream.get_by_itag(140).filesize) / (1024 * 1024 * 1024):.2f} GB" if stream.get_by_itag(699).filesize + stream.get_by_itag(140).filesize >= 1073741824 else f"{(stream.get_by_itag(699).filesize + stream.get_by_itag(140).filesize) / (1024 * 1024):.2f} MB"
                             fps = f"{stream.get_by_itag(699).fps}fps"
                             vdo_codec = stream.get_by_itag(699).video_codec
                             ado_codec = stream.get_by_itag(140).audio_codec
@@ -370,7 +370,7 @@ def show_video_info(link):
                             ado_bitrate = stream.get_by_itag(140).abr
                         else:
                             type = matching_stream.mime_type
-                            filesize = f"{(matching_stream.filesize + stream.get_by_itag(140).filesize) / (1024 * 1024):.2f} MB"
+                            filesize = f"{(matching_stream.filesize + stream.get_by_itag(140).filesize) / (1024 * 1024 * 1024):.2f} GB" if matching_stream.filesize + stream.get_by_itag(140).filesize >= 1073741824 else f"{(matching_stream.filesize + stream.get_by_itag(140).filesize) / (1024 * 1024):.2f} MB"
                             fps = f"{matching_stream.fps}fps"
                             vdo_codec = matching_stream.video_codec
                             ado_codec = stream.get_by_itag(140).audio_codec
@@ -379,7 +379,7 @@ def show_video_info(link):
                     elif res == '720p':
                         if stream.get_by_itag(698):
                             type = stream.get_by_itag(698).mime_type
-                            filesize = f"{(stream.get_by_itag(698).filesize + stream.get_by_itag(140).filesize) / (1024 * 1024):.2f} MB"
+                            filesize = f"{(stream.get_by_itag(698).filesize + stream.get_by_itag(140).filesize) / (1024 * 1024 * 1024):.2f} GB" if stream.get_by_itag(698).filesize + stream.get_by_itag(140).filesize >= 1073741824 else f"{(stream.get_by_itag(698).filesize + stream.get_by_itag(140).filesize) / (1024 * 1024):.2f} MB"
                             fps = f"{stream.get_by_itag(698).fps}fps"
                             vdo_codec = stream.get_by_itag(698).video_codec
                             ado_codec = stream.get_by_itag(140).audio_codec
@@ -387,7 +387,7 @@ def show_video_info(link):
                             ado_bitrate = stream.get_by_itag(140).abr
                         else:
                             type = matching_stream.mime_type
-                            filesize = f"{(matching_stream.filesize + stream.get_by_itag(140).filesize) / (1024 * 1024):.2f} MB"
+                            filesize = f"{(matching_stream.filesize + stream.get_by_itag(140).filesize) / (1024 * 1024 * 1024):.2f} GB" if matching_stream.filesize + stream.get_by_itag(140).filesize >= 1073741824 else f"{(matching_stream.filesize + stream.get_by_itag(140).filesize) / (1024 * 1024):.2f} MB"
                             fps = f"{matching_stream.fps}fps"
                             vdo_codec = matching_stream.video_codec
                             ado_codec = stream.get_by_itag(140).audio_codec
@@ -395,7 +395,7 @@ def show_video_info(link):
                             ado_bitrate = stream.get_by_itag(140).abr
                     elif res == '480p':
                         type = matching_stream.mime_type
-                        filesize = f"{(matching_stream.filesize + stream.get_by_itag(140).filesize) / (1024 * 1024):.2f} MB"
+                        filesize = f"{(matching_stream.filesize + stream.get_by_itag(140).filesize) / (1024 * 1024 * 1024):.2f} GB" if matching_stream.filesize + stream.get_by_itag(140).filesize >= 1073741824 else f"{(matching_stream.filesize + stream.get_by_itag(140).filesize) / (1024 * 1024):.2f} MB"
                         fps = f"{matching_stream.fps}fps"
                         vdo_codec = matching_stream.video_codec
                         ado_codec = stream.get_by_itag(140).audio_codec
@@ -403,7 +403,7 @@ def show_video_info(link):
                         ado_bitrate = stream.get_by_itag(140).abr
                     elif res == '360p':
                         type = matching_stream.mime_type
-                        filesize = f"{matching_stream.filesize / (1024 * 1024):.2f} MB"
+                        filesize = f"{matching_stream.filesize / (1024 * 1024 * 1024):.2f} GB" if matching_stream.filesize >= 1073741824 else f"{matching_stream.filesize / (1024 * 1024):.2f} MB"
                         fps = f"{matching_stream.fps}fps"
                         vdo_codec = matching_stream.video_codec
                         ado_codec = matching_stream.audio_codec
@@ -411,7 +411,7 @@ def show_video_info(link):
                         ado_bitrate = matching_stream.abr
                     elif res in ['240p', '144p']:
                         type = matching_stream.mime_type
-                        filesize = f"{(matching_stream.filesize + stream.get_by_itag(139).filesize) / (1024 * 1024):.2f} MB"
+                        filesize = f"{(matching_stream.filesize + stream.get_by_itag(139).filesize) / (1024 * 1024 * 1024):.2f} GB" if matching_stream.filesize + stream.get_by_itag(139).filesize >= 1073741824 else f"{(matching_stream.filesize + stream.get_by_itag(139).filesize) / (1024 * 1024):.2f} MB"
                         fps = f"{matching_stream.fps}fps"
                         vdo_codec = matching_stream.video_codec
                         ado_codec = stream.get_by_itag(139).audio_codec
@@ -419,7 +419,7 @@ def show_video_info(link):
                         ado_bitrate = stream.get_by_itag(139).abr
                     elif res == 'mp3':
                         type = "audio/mp3"
-                        filesize = f"{matching_stream.filesize / (1024 * 1024):.2f} MB"
+                        filesize = f"{matching_stream.filesize / (1024 * 1024 * 1024):.2f} GB" if matching_stream.filesize >= 1073741824 else f"{matching_stream.filesize / (1024 * 1024):.2f} MB"
                         fps = "none"
                         vdo_codec = "none"
                         ado_codec = matching_stream.audio_codec
