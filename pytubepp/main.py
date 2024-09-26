@@ -468,7 +468,7 @@ def show_raw_info(link, prettify=False):
                     if res == '2160p':
                         resolution = '2160p'
                         if stream.get_by_itag(701):
-                            itag = '701'
+                            itag = 701
                             type = stream.get_by_itag(701).mime_type
                             filesize = stream.get_by_itag(701).filesize + stream.get_by_itag(140).filesize
                             fps = stream.get_by_itag(701).fps
@@ -490,7 +490,7 @@ def show_raw_info(link, prettify=False):
                     elif res == '1440p':
                         resolution = '1440p'
                         if stream.get_by_itag(700):
-                            itag = '700'
+                            itag = 700
                             type = stream.get_by_itag(700).mime_type
                             filesize = stream.get_by_itag(700).filesize + stream.get_by_itag(140).filesize
                             fps = stream.get_by_itag(700).fps
@@ -512,7 +512,7 @@ def show_raw_info(link, prettify=False):
                     elif res == '1080p':
                         resolution = '1080p'
                         if stream.get_by_itag(699):
-                            itag = '699'
+                            itag = 699
                             type = stream.get_by_itag(699).mime_type
                             filesize = stream.get_by_itag(699).filesize + stream.get_by_itag(140).filesize
                             fps = stream.get_by_itag(699).fps
@@ -534,7 +534,7 @@ def show_raw_info(link, prettify=False):
                     elif res == '720p':
                         resolution = '720p'
                         if stream.get_by_itag(698):
-                            itag = '698'
+                            itag = 698
                             type = stream.get_by_itag(698).mime_type
                             filesize = stream.get_by_itag(698).filesize + stream.get_by_itag(140).filesize
                             fps = stream.get_by_itag(698).fps
