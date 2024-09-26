@@ -464,6 +464,7 @@ def show_raw_info(link, prettify=False):
                         ado_codec = stream.get_by_itag(140).audio_codec
                         vdo_bitrate = f"{matching_stream.bitrate / 1024:.0f}kbps"
                         ado_bitrate = stream.get_by_itag(140).abr
+                        is_hdr = True if matching_stream.itag == 702 else False
                     if res == '2160p':
                         resolution = '2160p'
                         if stream.get_by_itag(701):
@@ -475,6 +476,7 @@ def show_raw_info(link, prettify=False):
                             ado_codec = stream.get_by_itag(140).audio_codec
                             vdo_bitrate = f"{stream.get_by_itag(701).bitrate / 1024:.0f}kbps"
                             ado_bitrate = stream.get_by_itag(140).abr
+                            is_hdr = True
                         else:
                             itag = matching_stream.itag
                             type = matching_stream.mime_type
@@ -484,6 +486,7 @@ def show_raw_info(link, prettify=False):
                             ado_codec = stream.get_by_itag(251).audio_codec
                             vdo_bitrate = f"{matching_stream.bitrate / 1024:.0f}kbps"
                             ado_bitrate = stream.get_by_itag(251).abr
+                            is_hdr = False
                     elif res == '1440p':
                         resolution = '1440p'
                         if stream.get_by_itag(700):
@@ -495,6 +498,7 @@ def show_raw_info(link, prettify=False):
                             ado_codec = stream.get_by_itag(140).audio_codec
                             vdo_bitrate = f"{stream.get_by_itag(700).bitrate / 1024:.0f}kbps"
                             ado_bitrate = stream.get_by_itag(140).abr
+                            is_hdr = True
                         else:
                             itag = matching_stream.itag
                             type = matching_stream.mime_type
@@ -504,6 +508,7 @@ def show_raw_info(link, prettify=False):
                             ado_codec = stream.get_by_itag(251).audio_codec
                             vdo_bitrate = f"{matching_stream.bitrate / 1024:.0f}kbps"
                             ado_bitrate = stream.get_by_itag(251).abr
+                            is_hdr = False
                     elif res == '1080p':
                         resolution = '1080p'
                         if stream.get_by_itag(699):
@@ -515,6 +520,7 @@ def show_raw_info(link, prettify=False):
                             ado_codec = stream.get_by_itag(140).audio_codec
                             vdo_bitrate = f"{stream.get_by_itag(699).bitrate / 1024:.0f}kbps"
                             ado_bitrate = stream.get_by_itag(140).abr
+                            is_hdr = True
                         else:
                             itag = matching_stream.itag
                             type = matching_stream.mime_type
@@ -524,6 +530,7 @@ def show_raw_info(link, prettify=False):
                             ado_codec = stream.get_by_itag(140).audio_codec
                             vdo_bitrate = f"{matching_stream.bitrate / 1024:.0f}kbps"
                             ado_bitrate = stream.get_by_itag(140).abr
+                            is_hdr = False
                     elif res == '720p':
                         resolution = '720p'
                         if stream.get_by_itag(698):
@@ -535,6 +542,7 @@ def show_raw_info(link, prettify=False):
                             ado_codec = stream.get_by_itag(140).audio_codec
                             vdo_bitrate = f"{stream.get_by_itag(698).bitrate / 1024:.0f}kbps"
                             ado_bitrate = stream.get_by_itag(140).abr
+                            is_hdr = True
                         else:
                             itag = matching_stream.itag
                             type = matching_stream.mime_type
@@ -544,6 +552,7 @@ def show_raw_info(link, prettify=False):
                             ado_codec = stream.get_by_itag(140).audio_codec
                             vdo_bitrate = f"{matching_stream.bitrate / 1024:.0f}kbps"
                             ado_bitrate = stream.get_by_itag(140).abr
+                            is_hdr = False
                     elif res == '480p':
                         itag = matching_stream.itag
                         resolution = '480p'
@@ -554,6 +563,7 @@ def show_raw_info(link, prettify=False):
                         ado_codec = stream.get_by_itag(140).audio_codec
                         vdo_bitrate = f"{matching_stream.bitrate / 1024:.0f}kbps"
                         ado_bitrate = stream.get_by_itag(140).abr
+                        is_hdr = False
                     elif res == '360p':
                         itag = matching_stream.itag
                         resolution = '360p'
@@ -564,6 +574,7 @@ def show_raw_info(link, prettify=False):
                         ado_codec = matching_stream.audio_codec
                         vdo_bitrate = f"{matching_stream.bitrate / 1024:.0f}kbps"
                         ado_bitrate = matching_stream.abr
+                        is_hdr = False
                     elif res in ['240p', '144p']:
                         itag = matching_stream.itag
                         resolution = res
@@ -574,6 +585,7 @@ def show_raw_info(link, prettify=False):
                         ado_codec = stream.get_by_itag(139).audio_codec
                         vdo_bitrate = f"{matching_stream.bitrate / 1024:.0f}kbps"
                         ado_bitrate = stream.get_by_itag(139).abr
+                        is_hdr = False
                     elif res == 'mp3':
                         itag = matching_stream.itag
                         resolution = 'mp3'
@@ -584,6 +596,7 @@ def show_raw_info(link, prettify=False):
                         ado_codec = matching_stream.audio_codec
                         vdo_bitrate = None
                         ado_bitrate = matching_stream.abr
+                        is_hdr = False
 
                 else:
                     filesize = "N/A"
@@ -596,7 +609,8 @@ def show_raw_info(link, prettify=False):
                     'vcodec': vdo_codec,
                     'acodec': ado_codec,
                     'vbitrate': vdo_bitrate,
-                    'abitrate': ado_bitrate
+                    'abitrate': ado_bitrate,
+                    'is_hdr': is_hdr
                 }
                 streams_list.append(current_stream)
 
@@ -606,6 +620,7 @@ def show_raw_info(link, prettify=False):
 
         if prettify:
             print(json.dumps({
+            'id': video.video_id,
             'title': video.title,
             'author': author,
             'thumbnail_url': thumbnail,
@@ -616,6 +631,7 @@ def show_raw_info(link, prettify=False):
             }, indent=4))
         else:
             print(json.dumps({
+                'id': video.video_id,
                 'title': video.title,
                 'author': author,
                 'thumbnail_url': thumbnail,
