@@ -3,8 +3,9 @@
 ### A Simple CLI Tool to Download Your Favourite YouTube Videos Effortlessly!
 
 [![status](https://img.shields.io/badge/status-active-brightgreen.svg?style=flat)](https://github.com/neosubhamoy/pytubepp/)
-[![verion](https://img.shields.io/badge/version-v1.0.8_stable-yellow.svg?style=flat)](https://github.com/neosubhamoy/pytubepp/)
-[![python](https://img.shields.io/badge/python-v3.12.x-blue?logo=python&style=flat)](https://www.python.org/downloads/)
+[![PypiDownloads](https://img.shields.io/pypi/dm/pytubepp?color=brightgreen)](https://pypi.org/project/pytubepp/)
+[![PypiVersion](https://img.shields.io/pypi/v/pytubepp?color=yellow)](https://pypi.org/project/pytubepp/)
+[![python](https://img.shields.io/badge/python-v3.12-blue?logo=python&style=flat)](https://www.python.org/downloads/)
 [![builds](https://img.shields.io/badge/builds-passing-brightgreen.svg?style=flat)](https://github.com/neosubhamoy/pytubepp/)
 [![PRs](https://img.shields.io/badge/PRs-welcome-blue.svg?style=flat)](https://github.com/neosubhamoy/pytubepp/)
 
