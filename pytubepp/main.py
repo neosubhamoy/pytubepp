@@ -435,7 +435,7 @@ def show_video_info(link):
             print('Sorry, No video streams found....!!!')
             sys.exit()
 
-        print(f'\nTitle: {video.title}\nAuthor: {author}\nPublished On: {video.publish_date.strftime('%d/%m/%Y')}\nDuration: {video.length}\nViews: {views}\n')
+        print(f'\nTitle: {video.title}\nAuthor: {author}\nPublished On: {video.publish_date.strftime("%d/%m/%Y")}\nDuration: {video.length}\nViews: {views}\n')
         print(tabulate(table, headers=['Stream', 'Alias (for -s flag)', 'Format', 'Size', 'FrameRate', 'V-Codec', 'A-Codec', 'V-BitRate', 'A-BitRate']))
         print('\n')
     else:
