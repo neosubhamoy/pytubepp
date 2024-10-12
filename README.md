@@ -45,11 +45,14 @@ Windows (10/11): `winget install ffmpeg`<br>
 MacOS (using Homebrew): `brew install ffmpeg`<br>
 Android (using Termux): `pkg install ffmpeg`
 
+Now install all of the dependencies in your system via PIP by simply running the below command
+```
+pip install -r requirements.txt
+```
 **NOTE: Always make sure 'PytubePP' and 'Pytubefix' is on the latest version to avoid issues (update them at least once a week) (Use the command below to update)**
 ```
 pip install pytubefix pytubepp --upgrade
 ```
-
 ### **📌 Commands and Flags**
 Using PytubePP is as simple as just supplying it only the YouTube video url as argument!
 ** Before Starting Please NOTE: PytubePP follows a simple rule - "Use the Default Download Configuration if No Flags are Passed"
