@@ -5,7 +5,7 @@
 [![status](https://img.shields.io/badge/status-active-brightgreen.svg?style=flat)](https://github.com/neosubhamoy/pytubepp/)
 [![PypiDownloads](https://img.shields.io/pypi/dm/pytubepp?color=brightgreen)](https://pypi.org/project/pytubepp/)
 [![PypiVersion](https://img.shields.io/pypi/v/pytubepp?color=yellow)](https://pypi.org/project/pytubepp/)
-[![python](https://img.shields.io/badge/python-v3.12-blue?logo=python&style=flat)](https://www.python.org/downloads/)
+[![python](https://img.shields.io/badge/python-v3.13-blue?logo=python&style=flat)](https://www.python.org/downloads/)
 [![builds](https://img.shields.io/badge/builds-passing-brightgreen.svg?style=flat)](https://github.com/neosubhamoy/pytubepp/)
 [![PRs](https://img.shields.io/badge/PRs-welcome-blue.svg?style=flat)](https://github.com/neosubhamoy/pytubepp/)
 
@@ -18,9 +18,12 @@
 * Smart Stream Selection
 * Highly Configurable and Many More 😉
 
-### **🧩 Dependencies**
+### **📎 Pre-Requirements**
+* [Python](https://www.python.org/downloads/) (>=3.8)
+* [FFmpeg](https://ffmpeg.org/)
+
+### **🧩 Python Dependencies**
 * [pytubefix](https://pypi.org/project/pytubefix/)
-* [FFmpeg (Not Pre-Included)](https://ffmpeg.org/)
 * [ffmpy](https://pypi.org/project/ffmpy/)
 * [mutagen](https://pypi.org/project/mutagen/)
 * [tabulate](https://pypi.org/project/tabulate/)
@@ -30,22 +33,28 @@
 * [setuptools](https://pypi.org/project/setuptools/)
 
 ### **🛠️ Installation**
-You can install PytubePP in your system via PIP by simply running the below command
+1. Install Python and PIP
+    - Linux (Debian): Python is pre-installed install PIP using `sudo apt install python3-pip`<br>
+    - Linux (Fedora): Python is pre-installed install PIP using `sudo dnf install python3-pip`<br>
+    - Linux (Arch): Python is pre-installed install PIP using `sudo pacman -S python-pip`<br>
+    - Windows (10/11): `winget install Python.Python.3.13`<br>
+    - MacOS (using Homebrew): `brew install python`<br>
+    - Android (using Termux): `pkg install python`
+2. Install FFmpeg 
+    - Linux (Debian): `sudo apt install ffmpeg`<br>
+    - Linux (Fedora): `sudo dnf install ffmpeg-free`<br>
+    - Linux (Arch): `sudo pacman -S ffmpeg`<br>
+    - Windows (10/11): `winget install ffmpeg`<br>
+    - MacOS (using Homebrew): `brew install ffmpeg`<br>
+    - Android (using Termux): `pkg install ffmpeg`
+3. Install PytubePP (using PIP)
 
 ```terminal
 pip install pytubepp
 ```
-**IMPORTANT: Before installing PytubePP make sure FFmpeg is installed in your system and accesable via your cli interface (FFmpeg is Must Required as some of the core features of pytubePP relies on FFmpeg, but due to security reasons we can not ship it with the module)**
-
-**>> Install FFmpeg (If you haven't already!)**
-
-Linux (Ubuntu): `sudo apt install ffmpeg`<br>
-Linux (Fedora): `sudo dnf install ffmpeg-free`<br>
-Windows (10/11): `winget install ffmpeg`<br>
-MacOS (using Homebrew): `brew install ffmpeg`<br>
-Android (using Termux): `pkg install ffmpeg`
 
 **NOTE: Always make sure 'PytubePP' and 'Pytubefix' is on the latest version to avoid issues (update them at least once a week) (Use the command below to update)**
+
 ```
 pip install pytubefix pytubepp --upgrade
 ```
