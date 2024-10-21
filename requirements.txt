@@ -8,3 +8,4 @@ appdirs
 setuptools
 wheel
 twine
+build

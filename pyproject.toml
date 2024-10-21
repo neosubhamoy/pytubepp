@@ -1,0 +1,60 @@
+[build-system]
+requires = ["setuptools>=67.4.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "pytubepp"
+version = "1.1.0"
+authors = [
+  { name="Subhamoy Biswas", email="hey@neosubhamoy.com" },
+]
+description = "A Simple CLI Tool to Download Your Favorite YouTube Videos Effortlessly!"
+readme = "README.md"
+requires-python = ">=3.8"
+license = {text = "MIT"}
+keywords = ["youtube", "download", "video", "pytube", "cli"]
+classifiers = [
+	"Development Status :: 5 - Production/Stable",
+    "Environment :: Console",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Natural Language :: English",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Programming Language :: Python",
+    "Topic :: Internet",
+    "Topic :: Multimedia :: Video",
+    "Topic :: Multimedia :: Sound/Audio :: Conversion",
+    "Topic :: Multimedia :: Video :: Conversion",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+    "Topic :: Terminals",
+    "Topic :: Utilities",
+]
+dependencies = [
+    "pytubefix",
+    "requests",
+    "ffmpy",
+    "mutagen",
+    "tabulate",
+    "tqdm",
+    "appdirs",
+    "setuptools",
+]
+
+[project.scripts]
+pytubepp = "pytubepp.main:main"
+
+[project.urls]
+"Homepage" = "https://github.com/neosubhamoy/pytubepp"
+"Bug Reports" = "https://github.com/neosubhamoy/pytubepp/issues"
+
+[tool.setuptools.packages.find]
+include = ["pytubepp*"]
+
+[tool.setuptools]
+license-files = ["LICENSE"]
