@@ -116,7 +116,7 @@ pytubepp "https://youtube.com/watch?v=2lAe1cqCOXo" -i
 
 Want to be part of this? Feel free to contribute...!! Pull Requests are always welcome...!! (^_^) Follow these simple steps to start building:
 
-* Make sure to install Python, Node.js and Git before proceeding.
+* Make sure to install Python, FFmpeg, Node.js and Git before proceeding.
 
 1. Fork this repo in your github account.
 2. Git clone the forked repo in your local machine.
