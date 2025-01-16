@@ -133,7 +133,7 @@ pip install -r requirements.txt
 ```terminal
 python -m build                                        // build the module
 
-pip install dist/pytubepp-<version>-py3-none-any.whl   // install the module
+pip install .\dist\pytubepp-<version>-py3-none-any.whl   // install the module (give the path to the newly genrated whl file based on your OS path style and don't forget to replace the <version> with the actual version number)
 ```
 5. Do the changes, Send a Pull Request with proper Description (NOTE: Pull Requests Without Proper Description will be Rejected)
 
