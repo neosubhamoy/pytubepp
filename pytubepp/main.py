@@ -45,7 +45,7 @@ class YouTubeDownloader:
         
         if is_valid_url(link):
             link = is_valid_url(link).group(1)
-            self.video = YouTube(link, on_progress_callback=progress)
+            self.video = YouTube(link, 'ANDROID', on_progress_callback=progress)
             self.author = self.video.author
             self.title = re.sub(r'[\\/*?:"<>|]', '_', self.author + ' - ' + self.video.title)
             self.thumbnail = self.video.thumbnail_url

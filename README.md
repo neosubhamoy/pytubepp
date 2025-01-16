@@ -9,7 +9,7 @@
 [![builds](https://img.shields.io/badge/builds-passing-brightgreen.svg?style=flat)](https://github.com/neosubhamoy/pytubepp/)
 [![PRs](https://img.shields.io/badge/PRs-welcome-blue.svg?style=flat)](https://github.com/neosubhamoy/pytubepp/)
 
-😀 GOOD NEWS: If you are Windows(10/11) user and don't want to bother remembering PytubePP Commands! (You are not familier with Command Line Tools). We recently released a Browser Extension that can auto detect YouTube Videos and You can download the Video in one click directly from the browser using PytubePP CLI. Install [PytubePP Helper](https://github.com/neosubhamoy/pytubepp-helper) app in your System and add [PytubePP Extension](https://github.com/neosubhamoy/pytubepp-extension) in your Browser to get started.
+😀 GOOD NEWS: If you are not a power user and don't want to bother remembering PytubePP Commands! (You are not familier with Command Line Tools). We recently released a Browser Extension that can auto detect YouTube Videos and You can download the Video in one click directly from the browser using PytubePP CLI. Install [PytubePP Helper](https://github.com/neosubhamoy/pytubepp-helper) app in your System and add [PytubePP Extension](https://github.com/neosubhamoy/pytubepp-extension) in your Browser to get started.
 
 ### **🏷️ Features**
 * Auto Post-Process & Merge YouTube DASH Streams
@@ -22,6 +22,7 @@
 ### **📎 Pre-Requirements**
 * [Python](https://www.python.org/downloads/) (>=3.8)
 * [FFmpeg](https://ffmpeg.org/)
+* [Node.js](https://nodejs.org/en/download/) (required for auto YT poToken genration which is currently not possible in Python environment)
 
 ### **🧩 Python Dependencies**
 * [pytubefix](https://pypi.org/project/pytubefix/)
@@ -48,7 +49,14 @@
     - Windows (10/11): `winget install ffmpeg`<br>
     - MacOS (using Homebrew): `brew install ffmpeg`<br>
     - Android (using Termux): `pkg install ffmpeg`
-3. Install PytubePP (using PIP)
+3. Install Node.js
+    - Linux (Debian): `curl -o- https://fnm.vercel.app/install | bash && fnm install --lts && fnm use lts`<br>
+    - Linux (Fedora): `curl -o- https://fnm.vercel.app/install | bash && fnm install --lts && fnm use lts`<br>
+    - Linux (Arch): `curl -o- https://fnm.vercel.app/install | bash && fnm install --lts && fnm use lts`<br>
+    - Windows (10/11): `winget install Schniz.fnm;fnm install --lts;fnm use lts`<br>
+    - MacOS (using Homebrew): `brew install node`<br>
+    - Android (using Termux): `pkg install nodejs`
+4. Install PytubePP (using PIP)
 
 ```terminal
 pip install pytubepp
