@@ -11,6 +11,8 @@
 
 😀 GOOD NEWS: If you are not a power user and don't want to bother remembering PytubePP Commands! (You are not familier with Command Line Tools). We recently released a Browser Extension that can auto detect YouTube Videos and You can download the Video in one click directly from the browser using PytubePP CLI. Install [PytubePP Helper](https://github.com/neosubhamoy/pytubepp-helper) app in your System and add [PytubePP Extension](https://github.com/neosubhamoy/pytubepp-extension) in your Browser to get started.
 
+> **🥰 Liked this project? Please consider giving it a Star (🌟) on github to show us your appreciation and help the algorythm recommend this project to even more awesome people like you!**
+
 ### **🏷️ Features**
 * Auto Post-Process & Merge YouTube DASH Streams
 * Supports upto 8K 60fps HDR Stream Download
@@ -57,6 +59,8 @@
     - MacOS (using Homebrew): `brew install node`<br>
     - Android (using Termux): `pkg install nodejs`
 4. Install PytubePP (using PIP)
+
+> Use `pip3` command instead of `pip` if you are on Linux or MacOS.
 
 ```terminal
 pip install pytubepp
@@ -108,6 +112,30 @@ pytubepp "https://youtube.com/watch?v=2lAe1cqCOXo" -i
 | -sc | Show all current user configurations | NO | NO | No parameters | No default |
 | -ct | Clear temporary files (audio, video, thumbnail) of the failed, incomplete downloads | NO | NO | No parameters | No default |
 
+### 🛠️ Contributing / Building from Source
+
+Want to be part of this? Feel free to contribute...!! Pull Requests are always welcome...!! (^_^) Follow these simple steps to start building:
+
+* Make sure to install Python, Node.js and Git before proceeding.
+
+1. Fork this repo in your github account.
+2. Git clone the forked repo in your local machine.
+
+> Use `python3` and `pip3` commands instead of `python` and `pip` if you are on Linux or MacOS.
+
+3. Install python dependencies
+
+```terminal
+pip install -r requirements.txt
+```
+4. build, install and test the module
+
+```terminal
+python -m build                                        // build the module
+
+pip install dist/pytubepp-<version>-py3-none-any.whl   // install the module
+```
+5. Do the changes, Send a Pull Request with proper Description (NOTE: Pull Requests Without Proper Description will be Rejected)
 
 ⭕ Noticed any Bugs? or Want to give me some suggetions? always feel free to open an issue...!!
 
@@ -115,8 +143,7 @@ pytubepp "https://youtube.com/watch?v=2lAe1cqCOXo" -i
 
 PytubePP - (Pytube Post Processor) is a Fully Open Sourced Project licensed under MIT License. Anyone can view, modify, use (personal and commercial) or distribute it's sources without any attribution and extra permissions.
 
-**🌟 Liked this project? Please consider giving it a star to show me your appreciation**
-<br></br>
+⚖️ NOTE: YouTube is a trademark of Google LLC. Use of this trademark is subject to Google Permissions. Downloading and using Copyrighted YouTube Content for Commercial pourposes are not allowed by YouTube Terms without proper Permissions from the Creator. We don't promote this kinds of activity, You should use the downloaded contents wisely and at your own responsibility.
 
 ****
 
