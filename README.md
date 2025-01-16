@@ -15,6 +15,7 @@
 * Auto Post-Process & Merge YouTube DASH Streams
 * Supports upto 8K 60fps HDR Stream Download
 * Supports MP3 Download (with Embeded Thumbnail and Tags)
+* Supports Embeded Captions
 * Smart Stream Selection
 * Highly Configurable and Many More 😉
 
@@ -62,13 +63,17 @@ pip install pytubefix pytubepp --upgrade
 ### **📌 Commands and Flags**
 Using PytubePP is as simple as just supplying it only the YouTube video url as argument!
 ** Before Starting Please NOTE: PytubePP follows a simple rule - "Use the Default Download Configuration if No Flags are Passed"
-* To download a video in maximum available resolution the command will look like:
+* To download a video in default configuration (maximum resolution and without any caption by default) the command will look like:
 ```terminal
 pytubepp "https://youtube.com/watch?v=2lAe1cqCOXo"
 ```
 * To download the video in a specific resolution (suppose 480p) the command will be:
 ```terminal
 pytubepp "https://youtube.com/watch?v=2lAe1cqCOXo" -s 480p
+```
+* To download the video with embeded caption (suppose en - English) the command will be:
+```terminal
+pytubepp "https://youtube.com/watch?v=2lAe1cqCOXo" -c en
 ```
 * To download the video in audio-only MP3 format the command will be:
 ```terminal
@@ -84,10 +89,12 @@ pytubepp "https://youtube.com/watch?v=2lAe1cqCOXo" -i
 | Flag | Usage | Requires Parameter | Requires URL | Parameters | Default |
 | :--- | :---  | :---               | :---         | :---       | :---    |
 | -s | Choose preferred download stream | YES | YES | `144` `144p` `240` `240p` `360` `360p` `480` `480p` `720` `720p` `hd` `1080` `1080p` `fhd` `1440` `1440p` `2k` `2160` `2160p` `4k` `4320` `4320p` `8k` `mp3` (Pass any one of them) | Your chosen Default Stream via `-ds` flag |
+| -c | Choose preferred caption | YES | YES | All [ISO 639-1 Language Codes](https://www.w3schools.com/tags/ref_language_codes.asp) + some others (Pass any one of them) eg: `en` for English | Your chosen Default Caption via `-dc` flag |
 | -i | Shows the video information like: Title, Author, Views, Publication Date, Duration, Available Download Streams | NO | YES | No parameters | No default |
 | -ri | Shows the video information in raw json format | NO | YES | No parameters | No default |
 | -jp | Shows raw json output in prettified view (with indentation: 4) (primarily used with -ri flag)| NO | YES | No parameters | No default |
 | -ds | Set default download stream | YES | NO | `144p` `240p` `360p` `480p` `720p` `1080p` `1440p` `2160p` `4320p` `mp3` `max` (Pass any one of them) | `max` |
+| -dc | Set default caption | YES | NO | All [ISO 639-1 Language Codes](https://www.w3schools.com/tags/ref_language_codes.asp) + some others + `none` for No Caption (Pass any one of them) eg: `en` for English | `none` |
 | -df | Set custom download folder path | YES | NO | Use the full path excluding the last trailing slash within double quotes eg(in Linux): `"/path/to/folder"` (Make sure the folder path you enterted is already created and accessable) | Within `PytubePP Downloads` folder in your System's `Downloads` folder |
 | -r | Reset to default configuration (Download Folder, Default Stream) | NO | NO | No parameters | No default |
 | -sc | Show all current user configurations | NO | NO | No parameters | No default |
