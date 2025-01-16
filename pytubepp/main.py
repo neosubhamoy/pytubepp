@@ -13,6 +13,7 @@ class YouTubeDownloader:
         self.temp_dir = get_temporary_directory()
         self.config_dir = appdirs.user_config_dir('pytubepp')
         self.default_stream = self.user_config['defaultStream']
+        self.default_caption = self.user_config['defaultCaption']
         self.version = get_version()
         
         # Video attributes
@@ -50,6 +51,7 @@ class YouTubeDownloader:
             self.thumbnail = self.video.thumbnail_url
             self.views = str(self.video.views)
             self.stream = self.video.streams
+            self.captions = self.video.captions
             
             # Find maximum resolution
             for res in self.stream_resolutions.keys():
@@ -144,7 +146,7 @@ class YouTubeDownloader:
                 print('Sorry, No video streams found....!!!')
                 sys.exit()
 
-            print(f'\nTitle: {self.video.title}\nAuthor: {self.author}\nPublished On: {self.video.publish_date.strftime("%d/%m/%Y")}\nDuration: {self.video.length}\nViews: {self.views}\n')
+            print(f'\nTitle: {self.video.title}\nAuthor: {self.author}\nPublished On: {self.video.publish_date.strftime("%d/%m/%Y")}\nDuration: {f"{self.video.length//3600:02}:{(self.video.length%3600)//60:02}:{self.video.length%60:02}" if self.video.length >= 3600 else f"{(self.video.length%3600)//60:02}:{self.video.length%60:02}"}\nViews: {self.views}\nCaptions: {[caption.code for caption in self.captions.keys()] or "Unavailable"}\n')
             print(tabulate(table, headers=['Stream', 'Alias (for -s flag)', 'Format', 'Size', 'FrameRate', 'V-Codec', 'A-Codec', 'V-BitRate', 'A-BitRate']))
             print('\n')
         else:
@@ -188,6 +190,7 @@ class YouTubeDownloader:
                 'published_on': self.video.publish_date.strftime('%d/%m/%Y'),
                 'duration': self.video.length,
                 'streams': streams_list,
+                'captions': [caption.code for caption in self.captions.keys()] or None
             }
             
             print(json.dumps(output, indent=4 if prettify else None))
@@ -203,6 +206,13 @@ class YouTubeDownloader:
                     found = True
                     allowed_streams.extend(self.stream_resolutions[res]['allowed_streams'])
             return allowed_streams
+        else:
+            print('\nInvalid video link! Please enter a valid video url...!!')
+            return []
+        
+    def get_allowed_captions(self, link):
+        if self.set_video_info(link):
+            return self.captions.keys()
         else:
             print('\nInvalid video link! Please enter a valid video url...!!')
             return []
@@ -222,30 +232,35 @@ class YouTubeDownloader:
         }
         print(f'\nTitle: {self.title}\nSelected Stream: {resolution_map.get(chosen_stream, "Unknown")}\n')
 
-    def download_stream(self, link, chosen_stream):
+    def download_stream(self, link, chosen_stream, chosen_caption=None):
         if self.set_video_info(link):
-            self.print_short_info(chosen_stream)
             allowed_streams = self.get_allowed_streams(link)
+            allowed_captions = self.get_allowed_captions(link)
+
+            if chosen_caption and (chosen_caption not in allowed_captions):
+                print('\nInvalid caption code or caption not available! Please choose a different caption...!! (use -i to see available captions)')
+                sys.exit()
             
             if chosen_stream in allowed_streams:
+                self.print_short_info(chosen_stream)
                 if chosen_stream in ['360', '360p']:
-                    download_progressive(self.stream, 18, self.title, '360p', 'mp4')
+                    download_progressive(self.stream, 18, self.title, '360p', 'mp4', self.captions, chosen_caption)
                 elif chosen_stream in ['1080', '1080p', 'fhd']:
-                    self._handle_1080p_download()
+                    self._handle_1080p_download(chosen_caption)
                 elif chosen_stream in ['720', '720p', 'hd']:
-                    self._handle_720p_download()
+                    self._handle_720p_download(chosen_caption)
                 elif chosen_stream in ['480', '480p']:
-                    merge_audio_video(self.title, '480p', 'mp4', download_nonprogressive(self.stream, 135, 140, 'mp4', self.temp_dir))
+                    merge_audio_video(self.title, '480p', 'mp4', download_nonprogressive(self.stream, 135, 140, 'mp4', self.temp_dir), self.captions, chosen_caption)
                 elif chosen_stream in ['240', '240p']:
-                    merge_audio_video(self.title, '240p', 'mp4', download_nonprogressive(self.stream, 133, 139, 'mp4', self.temp_dir))
+                    merge_audio_video(self.title, '240p', 'mp4', download_nonprogressive(self.stream, 133, 139, 'mp4', self.temp_dir), self.captions, chosen_caption)
                 elif chosen_stream in ['144', '144p']:
-                    merge_audio_video(self.title, '144p', 'mp4', download_nonprogressive(self.stream, 160, 139, 'mp4', self.temp_dir))
+                    merge_audio_video(self.title, '144p', 'mp4', download_nonprogressive(self.stream, 160, 139, 'mp4', self.temp_dir), self.captions, chosen_caption)
                 elif chosen_stream in ['4320', '4320p', '8k']:
-                    self._handle_4320p_download()
+                    self._handle_4320p_download(chosen_caption)
                 elif chosen_stream in ['2160', '2160p', '4k']:
-                    self._handle_2160p_download()
+                    self._handle_2160p_download(chosen_caption)
                 elif chosen_stream in ['1440', '1440p', '2k']:
-                    self._handle_1440p_download()
+                    self._handle_1440p_download(chosen_caption)
                 elif chosen_stream == 'mp3':
                     convert_to_mp3(self.title, self.thumbnail, download_audio(self.stream, 140, self.temp_dir), self.author, self.video.title, self.author)
             else:
@@ -253,39 +268,43 @@ class YouTubeDownloader:
         else:
             print('\nInvalid video link! Please enter a valid video url...!!')
 
-    def _handle_4320p_download(self):
+    def _handle_4320p_download(self, chosen_caption=None):
         if self.stream.get_by_itag(702):
-            merge_audio_video(self.title, '8k', 'mp4', download_nonprogressive(self.stream, 702, 140, 'mp4', self.temp_dir))
+            merge_audio_video(self.title, '8k', 'mp4', download_nonprogressive(self.stream, 702, 140, 'mp4', self.temp_dir), self.captions, chosen_caption)
         elif self.stream.get_by_itag(571):
-            merge_audio_video(self.title, '8k', 'mp4', download_nonprogressive(self.stream, 571, 140, 'mp4', self.temp_dir))
+            merge_audio_video(self.title, '8k', 'mp4', download_nonprogressive(self.stream, 571, 140, 'mp4', self.temp_dir), self.captions, chosen_caption)
 
-    def _handle_2160p_download(self):
+    def _handle_2160p_download(self, chosen_caption=None):
         if self.stream.get_by_itag(701):
-            merge_audio_video(self.title, '4k', 'mp4', download_nonprogressive(self.stream, 701, 140, 'mp4', self.temp_dir))
+            merge_audio_video(self.title, '4k', 'mp4', download_nonprogressive(self.stream, 701, 140, 'mp4', self.temp_dir), self.captions, chosen_caption)
         elif self.stream.get_by_itag(315):
-            merge_audio_video(self.title, '4k', 'webm', download_nonprogressive(self.stream, 315, 251, 'webm', self.temp_dir))
+            merge_audio_video(self.title, '4k', 'webm', download_nonprogressive(self.stream, 315, 251, 'webm', self.temp_dir), self.captions, chosen_caption)
         elif self.stream.get_by_itag(313):
-            merge_audio_video(self.title, '4k', 'webm', download_nonprogressive(self.stream, 313, 251, 'webm', self.temp_dir))
+            merge_audio_video(self.title, '4k', 'webm', download_nonprogressive(self.stream, 313, 251, 'webm', self.temp_dir), self.captions, chosen_caption)
 
-    def _handle_1440p_download(self):
+    def _handle_1440p_download(self, chosen_caption=None):
         if self.stream.get_by_itag(700):
-            merge_audio_video(self.title, '2k', 'mp4', download_nonprogressive(self.stream, 700, 140, 'mp4', self.temp_dir))
+            merge_audio_video(self.title, '2k', 'mp4', download_nonprogressive(self.stream, 700, 140, 'mp4', self.temp_dir), self.captions, chosen_caption)
         elif self.stream.get_by_itag(308):
-            merge_audio_video(self.title, '2k', 'webm', download_nonprogressive(self.stream, 308, 251, 'webm', self.temp_dir))
+            merge_audio_video(self.title, '2k', 'webm', download_nonprogressive(self.stream, 308, 251, 'webm', self.temp_dir), self.captions, chosen_caption)
         elif self.stream.get_by_itag(271):
-            merge_audio_video(self.title, '2k', 'webm', download_nonprogressive(self.stream, 271, 251, 'webm', self.temp_dir))
+            merge_audio_video(self.title, '2k', 'webm', download_nonprogressive(self.stream, 271, 251, 'webm', self.temp_dir), self.captions, chosen_caption)
 
-    def _handle_1080p_download(self):
+    def _handle_1080p_download(self, chosen_caption=None):
         if self.stream.get_by_itag(699):
-            merge_audio_video(self.title, '1080p', 'mp4', download_nonprogressive(self.stream, 699, 140, 'mp4', self.temp_dir))
-        else:
-            merge_audio_video(self.title, '1080p', 'mp4', download_nonprogressive(self.stream, 137, 140, 'mp4', self.temp_dir))
+            merge_audio_video(self.title, '1080p', 'mp4', download_nonprogressive(self.stream, 699, 140, 'mp4', self.temp_dir), self.captions, chosen_caption)
+        elif self.stream.get_by_itag(299):
+            merge_audio_video(self.title, '1080p', 'mp4', download_nonprogressive(self.stream, 299, 140, 'mp4', self.temp_dir), self.captions, chosen_caption)
+        elif self.stream.get_by_itag(137):
+            merge_audio_video(self.title, '1080p', 'mp4', download_nonprogressive(self.stream, 137, 140, 'mp4', self.temp_dir), self.captions, chosen_caption)
 
-    def _handle_720p_download(self):
+    def _handle_720p_download(self, chosen_caption=None):
         if self.stream.get_by_itag(698):
-            merge_audio_video(self.title, '720p', 'mp4', download_nonprogressive(self.stream, 698, 140, 'mp4', self.temp_dir))
-        else:
-            merge_audio_video(self.title, '720p', 'mp4', download_nonprogressive(self.stream, 136, 140, 'mp4', self.temp_dir))
+            merge_audio_video(self.title, '720p', 'mp4', download_nonprogressive(self.stream, 698, 140, 'mp4', self.temp_dir), self.captions, chosen_caption)
+        elif self.stream.get_by_itag(298):
+            merge_audio_video(self.title, '720p', 'mp4', download_nonprogressive(self.stream, 298, 140, 'mp4', self.temp_dir), self.captions, chosen_caption)
+        elif self.stream.get_by_itag(136):
+            merge_audio_video(self.title, '720p', 'mp4', download_nonprogressive(self.stream, 136, 140, 'mp4', self.temp_dir), self.captions, chosen_caption)
 
 def main():
     downloader = YouTubeDownloader()
@@ -294,7 +313,9 @@ def main():
     parser.add_argument('url', nargs='?', default=None, help='url of the youtube video')
     parser.add_argument('-df', '--download-folder', default=argparse.SUPPRESS, help='set custom download folder path (default: ~/Downloads/Pytube Downloads) [arg eg: "/path/to/folder"]')
     parser.add_argument('-ds', '--default-stream', default=argparse.SUPPRESS, help='set default download stream (default: max) [available arguments: 144p, 240p, 360p, 480p, 720p, 1080p, 1440p, 2160p, 4320p, mp3, max]')
+    parser.add_argument('-dc', '--default-caption', default=argparse.SUPPRESS, help='set default caption (default: none) [available arguments: all language codes, none]')
     parser.add_argument('-s', '--stream', default=argparse.SUPPRESS, help='choose download stream for the current video (default: your chosen --default-stream) [available arguments: 144p, 240p, 360p, 480p, 720p, 1080p, 1440p, 2160p, 4320p, 144, 240, 360, 480, 720, 1080, 1440, 2160, 4320, mp3, hd, fhd, 2k, 4k, 8k]')
+    parser.add_argument('-c', '--caption', default=argparse.SUPPRESS, help='choose caption to embed for the current video (default: none)')
     parser.add_argument('-i', '--show-info', action='store_true', help='show video info (title, author, views and available_streams)')
     parser.add_argument('-ri', '--raw-info', action='store_true', help='show video info in raw json format')
     parser.add_argument('-jp', '--json-prettify', action='store_true', help='show json in prettified indented view')
@@ -319,6 +340,8 @@ def main():
             print('\nVideo url supplied! igonering -df flag...!!')
         if hasattr(args, 'default_stream'):
             print('\nVideo url supplied! ignoreing -ds flag...!!')
+        if hasattr(args, 'default_caption'):
+            print('\nVideo url supplied! ignoreing -dc flag...!!')
         if args.reset_default:
             print('\nVideo url supplied! ignoreing -r flag...!!')
         if args.clear_temp:
@@ -335,14 +358,68 @@ def main():
             print('\nMissing flag! -jp flag must be used with a flag which returns json data...!! (eg: -ri)')
         
         # Handle download cases
-        if hasattr(args, 'stream'):
-            downloader.download_stream(args.url, args.stream)
-        elif not any([args.show_info, args.raw_info, args.json_prettify]):  # If no info flags are set
+        if hasattr(args, 'stream') and hasattr(args, 'caption'):
             if downloader.set_video_info(args.url):
-                if downloader.default_stream == 'max' and downloader.maxres:
-                    downloader.download_stream(args.url, downloader.maxres)
-                elif (downloader.default_stream == 'mp3' and downloader.stream.get_by_itag(140)) or (downloader.default_stream != 'max' and downloader.stream.filter(res=downloader.default_stream)):
-                    downloader.download_stream(args.url, downloader.default_stream)
+                if args.caption not in downloader.captions.keys():
+                    print('\nInvalid caption code or caption not available! Please choose a different caption...!! (use -i to see available captions)')
+                    sys.exit()
+                elif args.stream == 'mp3' and downloader.stream.get_by_itag(140):
+                    print(f'\nYou have chosen to download mp3 stream! ( Captioning audio files is not supported )')
+                    answer = input('Do you still want to continue downloading ? [yes/no]\n')
+                    while answer not in ['yes', 'y', 'no', 'n']:
+                        print('Invalid answer! try again...!! answer with: [yes/y/no/n]')
+                        answer = input('Do you still want to continue downloading ? [yes/no]\n')
+                    if answer in ['yes', 'y']:
+                        downloader.download_stream(args.url, args.stream)
+                    else:
+                        print('Download cancelled! exiting...!!')
+                else:
+                    downloader.download_stream(args.url, args.stream, args.caption)
+        elif hasattr(args, 'stream'):
+            if downloader.set_video_info(args.url):
+                if downloader.default_caption == 'none':
+                    downloader.download_stream(args.url, args.stream)
+                elif args.stream == 'mp3' and downloader.stream.get_by_itag(140):
+                        print(f'\nYou have chosen to download mp3 stream! ( Captioning audio files is not supported )')
+                        answer = input('Do you still want to continue downloading ? [yes/no]\n')
+                        while answer not in ['yes', 'y', 'no', 'n']:
+                            print('Invalid answer! try again...!! answer with: [yes/y/no/n]')
+                            answer = input('Do you still want to continue downloading ? [yes/no]\n')
+                        if answer in ['yes', 'y']:
+                            downloader.download_stream(args.url, args.stream)
+                        else:
+                            print('Download cancelled! exiting...!!')
+                elif downloader.default_caption in downloader.captions.keys():
+                    downloader.download_stream(args.url, args.stream, downloader.default_caption)
+                else:
+                    print(f'\nDefault caption not available! ( Default: {downloader.default_caption} | Available: {[caption.code for caption in downloader.captions.keys()] or "Nothing"} )')
+                    answer = input('Do you still want to continue downloading without caption? [yes/no]\n')
+                    while answer not in ['yes', 'y', 'no', 'n']:
+                        print('Invalid answer! try again...!! answer with: [yes/y/no/n]')
+                        answer = input('Do you still want to continue downloading without caption? [yes/no]\n')
+                    if answer in ['yes', 'y']:
+                        downloader.download_stream(args.url, args.stream)
+                    else:
+                        print('Download cancelled! exiting...!!')
+        elif hasattr(args, 'caption'):
+            if downloader.set_video_info(args.url):
+                if args.caption not in downloader.captions.keys():
+                    print('\nInvalid caption code or caption not available! Please choose a different caption...!! (use -i to see available captions)')
+                    sys.exit()
+                elif downloader.default_stream == 'max' and downloader.maxres:
+                    downloader.download_stream(args.url, downloader.maxres, args.caption)
+                elif downloader.default_stream == 'mp3' and downloader.stream.get_by_itag(140):
+                        print(f'\nDefault stream set to mp3! ( Captioning audio files is not supported )')
+                        answer = input('Do you still want to continue downloading ? [yes/no]\n')
+                        while answer not in ['yes', 'y', 'no', 'n']:
+                            print('Invalid answer! try again...!! answer with: [yes/y/no/n]')
+                            answer = input('Do you still want to continue downloading ? [yes/no]\n')
+                        if answer in ['yes', 'y']:
+                            downloader.download_stream(args.url, downloader.default_stream)
+                        else:
+                            print('Download cancelled! exiting...!!')
+                elif downloader.default_stream != 'max' and downloader.stream.filter(res=downloader.default_stream):
+                    downloader.download_stream(args.url, downloader.default_stream, args.caption)
                 else:
                     if downloader.maxres:
                         print(f'\nDefault stream not available! ( Default: {downloader.default_stream} | Available: {downloader.maxres} )')
@@ -351,9 +428,75 @@ def main():
                             print('Invalid answer! try again...!! answer with: [yes/y/no/n]')
                             answer = input('Do you want to download the maximum available stream ? [yes/no]\n')
                         if answer in ['yes', 'y']:
+                            downloader.download_stream(args.url, downloader.maxres, args.caption)
+                        else:
+                            print('Download cancelled! exiting...!!')
+                    else:
+                        print('Sorry, No downloadable video stream found....!!!')
+        elif not any([args.show_info, args.raw_info, args.json_prettify]):  # If no info flags are set
+            if downloader.set_video_info(args.url):
+                if downloader.default_stream == 'max' and downloader.maxres:
+                    if downloader.default_caption == 'none':
+                        downloader.download_stream(args.url, downloader.maxres)
+                    elif downloader.default_caption in downloader.captions.keys():
+                        downloader.download_stream(args.url, downloader.maxres, downloader.default_caption)
+                    else:
+                        print(f'\nDefault caption not available! ( Default: {downloader.default_caption} | Available: {[caption.code for caption in downloader.captions.keys()] or "Nothing"} )')
+                        answer = input('Do you still want to continue downloading without caption? [yes/no]\n')
+                        while answer not in ['yes', 'y', 'no', 'n']:
+                            print('Invalid answer! try again...!! answer with: [yes/y/no/n]')
+                            answer = input('Do you still want to continue downloading without caption? [yes/no]\n')
+                        if answer in ['yes', 'y']:
                             downloader.download_stream(args.url, downloader.maxres)
                         else:
                             print('Download cancelled! exiting...!!')
+                elif (downloader.default_stream == 'mp3' and downloader.stream.get_by_itag(140)) or (downloader.default_stream != 'max' and downloader.stream.filter(res=downloader.default_stream)):
+                    if downloader.default_caption == 'none':
+                        downloader.download_stream(args.url, downloader.default_stream)
+                    elif downloader.default_stream == 'mp3' and downloader.stream.get_by_itag(140):
+                        print(f'\nDefault stream set to mp3! ( Captioning audio files is not supported )')
+                        answer = input('Do you still want to continue downloading ? [yes/no]\n')
+                        while answer not in ['yes', 'y', 'no', 'n']:
+                            print('Invalid answer! try again...!! answer with: [yes/y/no/n]')
+                            answer = input('Do you still want to continue downloading ? [yes/no]\n')
+                        if answer in ['yes', 'y']:
+                            downloader.download_stream(args.url, downloader.default_stream)
+                        else:
+                            print('Download cancelled! exiting...!!')
+                    elif downloader.default_caption in downloader.captions.keys():
+                        downloader.download_stream(args.url, downloader.default_stream, downloader.default_caption)
+                    else:
+                        print(f'\nDefault caption not available! ( Default: {downloader.default_caption} | Available: {[caption.code for caption in downloader.captions.keys()] or "Nothing"} )')
+                        answer = input('Do you still want to continue downloading without caption? [yes/no]\n')
+                        while answer not in ['yes', 'y', 'no', 'n']:
+                            print('Invalid answer! try again...!! answer with: [yes/y/no/n]')
+                            answer = input('Do you still want to continue downloading without caption? [yes/no]\n')
+                        if answer in ['yes', 'y']:
+                            downloader.download_stream(args.url, downloader.default_stream)
+                        else:
+                            print('Download cancelled! exiting...!!')
+                else:
+                    if downloader.maxres:
+                        print(f'\nDefault stream not available! ( Default: {downloader.default_stream} | Available: {downloader.maxres} )')
+                        answer = input('Do you want to download the maximum available stream ? [yes/no]\n')
+                        while answer not in ['yes', 'y', 'no', 'n']:
+                            print('Invalid answer! try again...!! answer with: [yes/y/no/n]')
+                            answer = input('Do you want to download the maximum available stream ? [yes/no]\n')
+                        if answer in ['yes', 'y']:
+                            if downloader.default_caption == 'none':
+                                downloader.download_stream(args.url, downloader.maxres)
+                            elif downloader.default_caption in downloader.captions.keys():
+                                downloader.download_stream(args.url, downloader.maxres, downloader.default_caption)
+                            else:
+                                print(f'\nDefault caption not available! ( Default: {downloader.default_caption} | Available: {[caption.code for caption in downloader.captions.keys()] or "Nothing"} )')
+                                answer = input('Do you still want to continue downloading without caption? [yes/no]\n')
+                                while answer not in ['yes', 'y', 'no', 'n']:
+                                    print('Invalid answer! try again...!! answer with: [yes/y/no/n]')
+                                    answer = input('Do you still want to continue downloading without caption? [yes/no]\n')
+                                if answer in ['yes', 'y']:
+                                    downloader.download_stream(args.url, downloader.maxres)
+                                else:
+                                    print('Download cancelled! exiting...!!')
                     else:
                         print('Sorry, No downloadable video stream found....!!!')
     else:
@@ -377,7 +520,17 @@ def main():
                     print('\nInvalid default stream! Please enter a valid stream...!! (use -h to see available default_stream arguments)')
             else:
                 print('\nDefault stream is the same! Not updating...!!')
-            
+        
+        if hasattr(args, 'default_caption'):
+            if args.default_caption != downloader.default_caption:
+                if not all(c.isalpha() or c in '.-' for c in args.default_caption) or len(args.default_caption) > 10:
+                    print('\nInvalid caption code! Only a-z, A-Z, dash (-) and dot (.) are allowed with maximum 10 characters...!!')
+                else:
+                    update_config('defaultCaption', args.default_caption)
+                    print(f'\nDefault caption updated to: {args.default_caption}')
+            else:
+                print('\nDefault caption is the same! Not updating...!!')
+        
         if args.reset_default:
             reset_config()
         
@@ -385,7 +538,7 @@ def main():
             clear_temp_files()
 
         if args.show_config:
-            print(f'\ndownloadDIR: {downloader.download_dir}\ntempDIR: {downloader.temp_dir}\nconfigDIR: {downloader.config_dir}\ndefaultStream: {downloader.default_stream}\n')
+            print(f'\ntempDIR: {downloader.temp_dir} (Unchangeable) \nconfigDIR: {downloader.config_dir} (Unchangeable)\ndownloadDIR: {downloader.download_dir}\ndefaultStream: {downloader.default_stream}\ndefaultCaption: {downloader.default_caption}\n')
 
         if args.version:
             print(f'pytubepp {downloader.version}')

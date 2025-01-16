@@ -14,6 +14,7 @@ def get_download_folder():
 DEFAULT_CONFIG = {
     'downloadDIR': get_download_folder(),
     'defaultStream': 'max',
+    'defaultCaption': 'none',
 }
     
 def get_temporary_directory():

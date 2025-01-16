@@ -8,24 +8,62 @@ userConfig = load_config()
 downloadDIR = userConfig['downloadDIR']
 tempDIR = get_temporary_directory()
 
-def merge_audio_video(title, resolution, file_extention, random_filename, tempDIR=tempDIR, downloadDIR=downloadDIR):
+def merge_audio_video(title, resolution, file_extention, random_filename, captions, caption_code=None, tempDIR=tempDIR, downloadDIR=downloadDIR):
     video_file = os.path.join(tempDIR, random_filename + '_vdo.' + file_extention)
     audio_file = os.path.join(tempDIR, random_filename + '_ado.' + file_extention)
     output_temp_file = os.path.join(tempDIR, random_filename + '_merged.' + file_extention)
-    output_file = os.path.join(downloadDIR, get_unique_filename(title + '_' + resolution + '.' + file_extention))
-
-    input_params = {video_file: None, audio_file: None}
-    output_params = {output_temp_file: ['-c:v', 'copy', '-c:a', 'copy']}
+    output_file = os.path.join(downloadDIR, get_unique_filename(title + '_' + resolution + '.' + file_extention)) if not caption_code else os.path.join(downloadDIR, get_unique_filename(title + '_' + resolution + '_' + caption_code + '.' + file_extention))
     
-    print('Processing...')
-    devnull = open(os.devnull, 'w')
-    ff = ffmpy.FFmpeg(inputs=input_params, outputs=output_params)
-    ff.run(stdout=devnull, stderr=devnull)
-    devnull.close()
+    if caption_code:
+        print(f'Downloading Caption ({caption_code})...')
+        caption = captions[caption_code]
+        srt_file = os.path.join(tempDIR, random_filename + '_cap.srt')
+        caption.save_captions(srt_file)
+        vtt_file = os.path.join(tempDIR, random_filename + '_cap.vtt')
 
-    shutil.move(output_temp_file, output_file)
-    postprocess_cleanup(tempDIR, ['_vdo.' + file_extention, '_ado.' + file_extention, '_merged.' + file_extention], random_filename)
-    print('Done! 🎉')
+        print('Processing...')
+        if file_extention == 'webm':
+            devnull = open(os.devnull, 'w')
+            ff_convert = ffmpy.FFmpeg(
+                inputs={srt_file: None},
+                outputs={vtt_file: None}
+            )
+            ff_convert.run(stdout=devnull, stderr=devnull)
+            subtitle_file = vtt_file
+            subtitle_codec = 'webvtt'
+        else:
+            subtitle_file = srt_file
+            subtitle_codec = 'mov_text'
+        
+        input_params = {video_file: None, audio_file: None}
+        output_params = {output_temp_file: ['-i', subtitle_file, '-c:v', 'copy', '-c:a', 'copy', 
+                        '-c:s', subtitle_codec, '-metadata:s:s:0', f'language={caption_code}',
+                        '-metadata:s:s:0', f'title={caption_code}', '-metadata:s:s:0', f'handler_name={caption_code}']}
+        
+        devnull = open(os.devnull, 'w')
+        ff = ffmpy.FFmpeg(inputs=input_params, outputs=output_params)
+        ff.run(stdout=devnull, stderr=devnull)
+        devnull.close()
+
+        shutil.move(output_temp_file, output_file)
+        cleanup_files = ['_vdo.' + file_extention, '_ado.' + file_extention, '_cap.srt', '_merged.' + file_extention]
+        if file_extention == 'webm':
+            cleanup_files.append('_cap.vtt')
+        postprocess_cleanup(tempDIR, cleanup_files, random_filename)
+        print('Done! 🎉')
+    else:
+        input_params = {video_file: None, audio_file: None}
+        output_params = {output_temp_file: ['-c:v', 'copy', '-c:a', 'copy']}
+
+        print('Processing...')
+        devnull = open(os.devnull, 'w')
+        ff = ffmpy.FFmpeg(inputs=input_params, outputs=output_params)
+        ff.run(stdout=devnull, stderr=devnull)
+        devnull.close()
+
+        shutil.move(output_temp_file, output_file)
+        postprocess_cleanup(tempDIR, ['_vdo.' + file_extention, '_ado.' + file_extention, '_merged.' + file_extention], random_filename)
+        print('Done! 🎉')
 
 def convert_to_mp3(title, thumbnail_url, random_filename, mp3_artist='Unknown', mp3_title='Unknown', mp3_album='Unknown', tempDIR=tempDIR, downloadDIR=downloadDIR):
     image_file = os.path.join(tempDIR, random_filename + '_thumbnail.jpg')
