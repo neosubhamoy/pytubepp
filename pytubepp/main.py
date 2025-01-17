@@ -45,7 +45,7 @@ class YouTubeDownloader:
         
         if is_valid_url(link):
             link = is_valid_url(link).group(1)
-            self.video = YouTube(link, on_progress_callback=progress)
+            self.video = YouTube(link, 'WEB', on_progress_callback=progress)
             self.author = self.video.author
             self.title = re.sub(r'[\\/*?:"<>|]', '_', self.author + ' - ' + self.video.title)
             self.thumbnail = self.video.thumbnail_url
@@ -90,7 +90,7 @@ class YouTubeDownloader:
                 'ado_bitrate': matching_stream.abr
             }
         else:
-            _select_suitable_audio_stream = lambda stream: 139 if stream.itag in [160, 133] else (251 if stream.mime_type == 'video/webm' else 140)
+            _select_suitable_audio_stream = lambda stream: 251 if stream.mime_type == 'video/webm' else 140
             # Check for HDR variants first
             hdr_stream = None
             if res in ['4320p', '2160p', '1440p', '1080p', '720p']:
@@ -270,9 +270,9 @@ class YouTubeDownloader:
                 elif chosen_stream in ['480', '480p']:
                     merge_audio_video(self.title, '480p', 'mp4', download_nonprogressive(self.stream, 135, 140, 'mp4', self.temp_dir), self.captions, chosen_caption)
                 elif chosen_stream in ['240', '240p']:
-                    merge_audio_video(self.title, '240p', 'mp4', download_nonprogressive(self.stream, 133, 139, 'mp4', self.temp_dir), self.captions, chosen_caption)
+                    merge_audio_video(self.title, '240p', 'mp4', download_nonprogressive(self.stream, 133, 140, 'mp4', self.temp_dir), self.captions, chosen_caption)
                 elif chosen_stream in ['144', '144p']:
-                    merge_audio_video(self.title, '144p', 'mp4', download_nonprogressive(self.stream, 160, 139, 'mp4', self.temp_dir), self.captions, chosen_caption)
+                    merge_audio_video(self.title, '144p', 'mp4', download_nonprogressive(self.stream, 160, 140, 'mp4', self.temp_dir), self.captions, chosen_caption)
                 elif chosen_stream in ['4320', '4320p', '8k']:
                     self._handle_4320p_download(chosen_caption)
                 elif chosen_stream in ['2160', '2160p', '4k']:
