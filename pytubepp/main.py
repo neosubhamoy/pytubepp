@@ -45,7 +45,7 @@ class YouTubeDownloader:
         
         if is_valid_url(link):
             link = is_valid_url(link).group(1)
-            self.video = YouTube(link, 'ANDROID', on_progress_callback=progress)
+            self.video = YouTube(link, on_progress_callback=progress)
             self.author = self.video.author
             self.title = re.sub(r'[\\/*?:"<>|]', '_', self.author + ' - ' + self.video.title)
             self.thumbnail = self.video.thumbnail_url
@@ -149,6 +149,24 @@ class YouTubeDownloader:
             print(f'\nTitle: {self.video.title}\nAuthor: {self.author}\nPublished On: {self.video.publish_date.strftime("%d/%m/%Y")}\nDuration: {f"{self.video.length//3600:02}:{(self.video.length%3600)//60:02}:{self.video.length%60:02}" if self.video.length >= 3600 else f"{(self.video.length%3600)//60:02}:{self.video.length%60:02}"}\nViews: {self.views}\nCaptions: {[caption.code for caption in self.captions.keys()] or "Unavailable"}\n')
             print(tabulate(table, headers=['Stream', 'Alias (for -s flag)', 'Format', 'Size', 'FrameRate', 'V-Codec', 'A-Codec', 'V-BitRate', 'A-BitRate']))
             print('\n')
+        else:
+            print('\nInvalid video link! Please enter a valid video url...!!')
+
+    def show_all_streams(self, link):
+        if self.set_video_info(link):
+            print(f"Available Streams({len(self.stream)}):")
+            if self.stream:
+                for stream in self.stream:
+                    print(stream)
+            else:
+                print('No stream available!')
+
+            print(f"\nAvailable Captions({len(self.captions)}):")
+            if self.captions:
+                for caption in self.captions:
+                    print(caption)
+            else:
+                print('No caption available!')
         else:
             print('\nInvalid video link! Please enter a valid video url...!!')
 
@@ -315,8 +333,9 @@ def main():
     parser.add_argument('-ds', '--default-stream', default=argparse.SUPPRESS, help='set default download stream (default: max) [available arguments: 144p, 240p, 360p, 480p, 720p, 1080p, 1440p, 2160p, 4320p, mp3, max]')
     parser.add_argument('-dc', '--default-caption', default=argparse.SUPPRESS, help='set default caption (default: none) [available arguments: all language codes, none]')
     parser.add_argument('-s', '--stream', default=argparse.SUPPRESS, help='choose download stream for the current video (default: your chosen --default-stream) [available arguments: 144p, 240p, 360p, 480p, 720p, 1080p, 1440p, 2160p, 4320p, 144, 240, 360, 480, 720, 1080, 1440, 2160, 4320, mp3, hd, fhd, 2k, 4k, 8k]')
-    parser.add_argument('-c', '--caption', default=argparse.SUPPRESS, help='choose caption to embed for the current video (default: none)')
+    parser.add_argument('-c', '--caption', default=argparse.SUPPRESS, help='choose caption to embed for the current video (default: your chosen --default-caption) [available arguments: all language codes, none]')
     parser.add_argument('-i', '--show-info', action='store_true', help='show video info (title, author, views and available_streams)')
+    parser.add_argument('-ls', '--list-stream', action='store_true', help='list all available streams (video, audio, caption) (only for debuging purposes)')
     parser.add_argument('-ri', '--raw-info', action='store_true', help='show video info in raw json format')
     parser.add_argument('-jp', '--json-prettify', action='store_true', help='show json in prettified indented view')
     parser.add_argument('-sc', '--show-config', action='store_true', help='show all current user config settings')
@@ -352,6 +371,8 @@ def main():
         # Handle info display flags
         if args.show_info:
             downloader.show_video_info(args.url)
+        if args.list_stream:
+            downloader.show_all_streams(args.url)
         if args.raw_info:
             downloader.show_raw_info(args.url, args.json_prettify)
         if args.json_prettify and not args.raw_info:
@@ -433,7 +454,7 @@ def main():
                             print('Download cancelled! exiting...!!')
                     else:
                         print('Sorry, No downloadable video stream found....!!!')
-        elif not any([args.show_info, args.raw_info, args.json_prettify]):  # If no info flags are set
+        elif not any([args.show_info, args.raw_info, args.json_prettify, args.list_stream]):  # If no info flags are set
             if downloader.set_video_info(args.url):
                 if downloader.default_stream == 'max' and downloader.maxres:
                     if downloader.default_caption == 'none':
@@ -544,6 +565,9 @@ def main():
             print(f'pytubepp {downloader.version}')
 
         if args.show_info:
+            print('\nNo video url supplied! exiting...!!')
+
+        if args.list_stream:
             print('\nNo video url supplied! exiting...!!')
 
         if args.raw_info:

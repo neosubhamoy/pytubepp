@@ -103,6 +103,7 @@ pytubepp "https://youtube.com/watch?v=2lAe1cqCOXo" -i
 | -s | Choose preferred download stream | YES | YES | `144` `144p` `240` `240p` `360` `360p` `480` `480p` `720` `720p` `hd` `1080` `1080p` `fhd` `1440` `1440p` `2k` `2160` `2160p` `4k` `4320` `4320p` `8k` `mp3` (Pass any one of them) | Your chosen Default Stream via `-ds` flag |
 | -c | Choose preferred caption | YES | YES | All [ISO 639-1 Language Codes](https://www.w3schools.com/tags/ref_language_codes.asp) + some others (Pass any one of them) eg: `en` for English | Your chosen Default Caption via `-dc` flag |
 | -i | Shows the video information like: Title, Author, Views, Publication Date, Duration, Available Download Streams | NO | YES | No parameters | No default |
+| -ls | Lists all available streams (video, audio, caption) (only for debuging purposes) | NO | YES | No parameters | No default |
 | -ri | Shows the video information in raw json format | NO | YES | No parameters | No default |
 | -jp | Shows raw json output in prettified view (with indentation: 4) (primarily used with -ri flag)| NO | YES | No parameters | No default |
 | -ds | Set default download stream | YES | NO | `144p` `240p` `360p` `480p` `720p` `1080p` `1440p` `2160p` `4320p` `mp3` `max` (Pass any one of them) | `max` |
