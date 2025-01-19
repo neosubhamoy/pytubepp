@@ -402,9 +402,11 @@ def main():
         # Handle download cases
         if hasattr(args, 'stream') and hasattr(args, 'caption'):
             if downloader.set_video_info(args.url):
-                if args.caption not in downloader.captions.keys():
+                if (args.caption not in downloader.captions.keys()) and (args.caption != 'none'):
                     print('\nInvalid caption code or caption not available! Please choose a different caption...!! (use -i to see available captions)')
                     sys.exit()
+                elif args.caption == 'none':
+                    downloader.download_stream(args.url, args.stream)
                 elif args.stream == 'mp3' and downloader.stream.get_by_itag(140):
                     print(f'\nYou have chosen to download mp3 stream! ( Captioning audio files is not supported )')
                     answer = input('Do you still want to continue downloading ? [yes/no]\n')
@@ -445,9 +447,29 @@ def main():
                         print('Download cancelled! exiting...!!')
         elif hasattr(args, 'caption'):
             if downloader.set_video_info(args.url):
-                if args.caption not in downloader.captions.keys():
+                if (args.caption not in downloader.captions.keys()) and (args.caption != 'none'):
                     print('\nInvalid caption code or caption not available! Please choose a different caption...!! (use -i to see available captions)')
                     sys.exit()
+                elif args.caption == 'none':
+                    if downloader.default_stream == 'max' and downloader.maxres:
+                        downloader.download_stream(args.url, downloader.maxres)
+                    elif downloader.default_stream == 'mp3' and downloader.stream.get_by_itag(140):
+                        downloader.download_stream(args.url, downloader.default_stream)
+                    elif downloader.default_stream != 'max' and downloader.stream.filter(res=downloader.default_stream):
+                        downloader.download_stream(args.url, downloader.default_stream)
+                    else:
+                        if downloader.maxres:
+                            print(f'\nDefault stream not available! ( Default: {downloader.default_stream} | Available: {downloader.maxres} )')
+                            answer = input('Do you want to download the maximum available stream ? [yes/no]\n')
+                            while answer not in ['yes', 'y', 'no', 'n']:
+                                print('Invalid answer! try again...!! answer with: [yes/y/no/n]')
+                                answer = input('Do you want to download the maximum available stream ? [yes/no]\n')
+                            if answer in ['yes', 'y']:
+                                downloader.download_stream(args.url, downloader.maxres)
+                            else:
+                                print('Download cancelled! exiting...!!')
+                        else:
+                            print('Sorry, No downloadable video stream found....!!!')
                 elif downloader.default_stream == 'max' and downloader.maxres:
                     downloader.download_stream(args.url, downloader.maxres, args.caption)
                 elif downloader.default_stream == 'mp3' and downloader.stream.get_by_itag(140):
