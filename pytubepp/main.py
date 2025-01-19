@@ -240,20 +240,30 @@ class YouTubeDownloader:
             print('\nInvalid video link! Please enter a valid video url...!!')
             return []
 
-    def print_short_info(self, chosen_stream):
-        resolution_map = {
-            '4320': '4320p (8K)', '4320p': '4320p (8K)', '8k': '4320p (8K)',
-            '2160': '2160p (4K)', '2160p': '2160p (4K)', '4k': '2160p (4K)',
-            '1440': '1440p (2K)', '1440p': '1440p (2K)', '2k': '1440p (2K)',
-            '1080': '1080p (FHD)', '1080p': '1080p (FHD)', 'fhd': '1080p (FHD)',
-            '720': '720p (HD)', '720p': '720p (HD)', 'hd': '720p (HD)',
-            '480': '480p (SD)', '480p': '480p (SD)',
-            '360': '360p (SD)', '360p': '360p (SD)',
-            '240': '240p (LD)', '240p': '240p (LD)',
-            '144': '144p (LD)', '144p': '144p (LD)',
-            'mp3': 'mp3 (Audio)'
-        }
-        print(f'\nTitle: {self.title}\nSelected Stream: {resolution_map.get(chosen_stream, "Unknown")}\n')
+    def print_short_info(self, chosen_stream, chosen_caption=None):
+        print(f'\nTitle: {self.title}')
+        
+        if chosen_stream == 'mp3':
+            print(f'Selected: Audio [128kbps (140)]')
+            return
+            
+        if chosen_stream in ['360', '360p']:
+            print(f"Selected: Video [360p (18)] + Audio [96kbps (18)]{f' + Caption [{chosen_caption}]' if chosen_caption else ''}")
+            return
+            
+        _select_suitable_audio_stream = lambda stream: 251 if stream.mime_type == 'video/webm' else 140
+        res = next((k for k, v in self.stream_resolutions.items() if chosen_stream in v['allowed_streams']), None)
+        
+        if res:
+            hdr_stream = None
+            if res in ['4320p', '2160p', '1440p', '1080p', '720p']:
+                hdr_itags = {'4320p': 702, '2160p': 701, '1440p': 700, '1080p': 699, '720p': 698}
+                hdr_stream = self.stream.get_by_itag(hdr_itags.get(res))
+            
+            matching_stream = hdr_stream if hdr_stream else self.stream.filter(res=res).first()
+            audio_stream = self.stream.get_by_itag(_select_suitable_audio_stream(matching_stream))
+            
+            print(f"Selected: Video [{res} ({matching_stream.itag})] + Audio [{audio_stream.abr} ({audio_stream.itag})]{f' + Caption [{chosen_caption}]' if chosen_caption else ''}")
 
     def download_stream(self, link, chosen_stream, chosen_caption=None):
         if not ffmpeg_installed():
@@ -271,7 +281,7 @@ class YouTubeDownloader:
                 sys.exit()
             
             if chosen_stream in allowed_streams:
-                self.print_short_info(chosen_stream)
+                self.print_short_info(chosen_stream, chosen_caption)
                 if chosen_stream in ['360', '360p']:
                     download_progressive(self.stream, 18, self.title, '360p', 'mp4', self.captions, chosen_caption)
                 elif chosen_stream in ['1080', '1080p', 'fhd']:
