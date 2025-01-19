@@ -62,6 +62,8 @@
 
 > Use `pip3` command instead of `pip` if you are on Linux or MacOS.
 
+> Use `--break-system-packages` flag to install 'PytubePP' in global environment if you get `error: externally-managed-environment` while installing in Linux or MacOS (Don't worry it will not break your system packages, it's just a security mesure)
+
 ```terminal
 pip install pytubepp
 ```
@@ -72,21 +74,29 @@ pip install pytubepp
 pip install pytubefix pytubepp --upgrade
 ```
 
+**UNINSTALL: If you want to uninstall PytubePP (Use the command below to uninstall) NOTE: it will only remove the 'PytubePP' python package**
+```
+pip uninstall pytubepp -y
+```
+
 ### **📌 Commands and Flags**
 Using PytubePP is as simple as just supplying it only the YouTube video url as argument!
-** Before Starting Please NOTE: PytubePP follows a simple rule - "Use the Default Download Configuration if No Flags are Passed"
+> Before starting please NOTE: PytubePP follows a simple principle -> `Use Default Configuration if No Flags are Passed`
 * To download a video in default configuration (maximum resolution and without any caption by default) the command will look like:
 ```terminal
 pytubepp "https://youtube.com/watch?v=2lAe1cqCOXo"
 ```
+> NOTE: This command will behave differently if you have changed default configurations
 * To download the video in a specific resolution (suppose 480p) the command will be:
 ```terminal
 pytubepp "https://youtube.com/watch?v=2lAe1cqCOXo" -s 480p
 ```
+> NOTE: PytubePP always uses default configuration of flags if they are not passed for example if you only pass `-s` flag then it will use the default caption along with it, if you only pass `-c` then it will use default stream and vice versa
 * To download the video with embeded caption (suppose en - English) the command will be:
 ```terminal
 pytubepp "https://youtube.com/watch?v=2lAe1cqCOXo" -c en
 ```
+> NOTE: You can override and disable default caption for the current video if you pass `-c none`
 * To download the video in audio-only MP3 format the command will be:
 ```terminal
 pytubepp "https://youtube.com/watch?v=2lAe1cqCOXo" -s mp3
@@ -101,7 +111,7 @@ pytubepp "https://youtube.com/watch?v=2lAe1cqCOXo" -i
 | Flag | Usage | Requires Parameter | Requires URL | Parameters | Default |
 | :--- | :---  | :---               | :---         | :---       | :---    |
 | -s | Choose preferred download stream | YES | YES | `144` `144p` `240` `240p` `360` `360p` `480` `480p` `720` `720p` `hd` `1080` `1080p` `fhd` `1440` `1440p` `2k` `2160` `2160p` `4k` `4320` `4320p` `8k` `mp3` (Pass any one of them) | Your chosen Default Stream via `-ds` flag |
-| -c | Choose preferred caption | YES | YES | All [ISO 639-1 Language Codes](https://www.w3schools.com/tags/ref_language_codes.asp) + some others (Pass any one of them) eg: `en` for English | Your chosen Default Caption via `-dc` flag |
+| -c | Choose preferred caption | YES | YES | All [ISO 639-1 Language Codes](https://www.w3schools.com/tags/ref_language_codes.asp) + some others (Pass any one of them) + `none` for No Caption eg: `en` for English | Your chosen Default Caption via `-dc` flag |
 | -i | Shows the video information like: Title, Author, Views, Publication Date, Duration, Available Download Streams | NO | YES | No parameters | No default |
 | -ls | Lists all available streams (video, audio, caption) (only for debuging purposes) | NO | YES | No parameters | No default |
 | -ri | Shows the video information in raw json format | NO | YES | No parameters | No default |
