@@ -3,7 +3,7 @@ from tabulate import tabulate
 from .config import get_temporary_directory, load_config, update_config, reset_config
 from .download import download_progressive, download_nonprogressive, download_audio, progress
 from .postprocess import merge_audio_video, convert_to_mp3
-from .utils import get_version, clear_temp_files, is_valid_url, network_available
+from .utils import get_version, clear_temp_files, is_valid_url, network_available, ffmpeg_installed, nodejs_installed
 import appdirs, os, re, sys, argparse, json
 
 class YouTubeDownloader:
@@ -42,6 +42,11 @@ class YouTubeDownloader:
         if not network_available():
             print('\nRequest timeout! Please check your network and try again...!!')
             sys.exit()
+
+        if not nodejs_installed():
+            print("\nWarning: Node.js is not installed or not found in PATH!")
+            print("BotGuard poToken generation will not work properly without Node.js environment")
+            print("Please install Node.js from https://nodejs.org/en/download\n")
         
         if is_valid_url(link):
             link = is_valid_url(link).group(1)
@@ -251,6 +256,12 @@ class YouTubeDownloader:
         print(f'\nTitle: {self.title}\nSelected Stream: {resolution_map.get(chosen_stream, "Unknown")}\n')
 
     def download_stream(self, link, chosen_stream, chosen_caption=None):
+        if not ffmpeg_installed():
+            print("\nWarning: FFmpeg is not installed or not found in PATH!")
+            print("Some core functionalities like video processing will not work properly without FFmpeg")
+            print("Please install FFmpeg, read https://github.com/neosubhamoy/pytubepp#%EF%B8%8F-installation for instructions\n")
+            sys.exit()
+        
         if self.set_video_info(link):
             allowed_streams = self.get_allowed_streams(link)
             allowed_captions = self.get_allowed_captions(link)

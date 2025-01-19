@@ -14,6 +14,20 @@ def network_available():
         return True
     except subprocess.CalledProcessError:
         return False
+    
+def nodejs_installed():
+    try:
+        subprocess.run(['node', '--version'], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, check=True)
+        return True
+    except (subprocess.CalledProcessError, FileNotFoundError):
+        return False
+    
+def ffmpeg_installed():
+    try:
+        subprocess.run(['ffmpeg', '-version'], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, check=True)
+        return True
+    except (subprocess.CalledProcessError, FileNotFoundError):
+        return False
 
 def get_version():
     try:
