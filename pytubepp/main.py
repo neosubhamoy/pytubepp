@@ -593,8 +593,13 @@ def main():
         
         if hasattr(args, 'default_caption'):
             if args.default_caption != downloader.default_caption:
-                if not all(c.isalpha() or c in '.-' for c in args.default_caption) or len(args.default_caption) > 10:
-                    print('\nInvalid caption code! Only a-z, A-Z, dash (-) and dot (.) are allowed with maximum 10 characters...!!')
+                if not (re.match(r'^[a-z]{2}(-[A-Za-z]+)?$', args.default_caption) or
+                        re.match(r'^a\.[a-z]{2}(-[A-Za-z]+)?$', args.default_caption) or
+                        re.match(r'^none$', args.default_caption)):
+                    print('\nInvalid caption code! Allowed formats are:\n'
+                        '- ISO 639-1 language codes (e.g: en, zh-Hans)\n'
+                        '- Auto-generated variants: a.ISO639-1LanguageCode (e.g: a.en, a.zh-Hans)\n'
+                        '- none\n')
                 else:
                     update_config('defaultCaption', args.default_caption)
                     print(f'\nDefault caption updated to: {args.default_caption}')
