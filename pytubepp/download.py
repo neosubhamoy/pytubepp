@@ -1,6 +1,6 @@
 from tqdm import tqdm
 from .config import get_temporary_directory, load_config
-from .utils import get_unique_filename, postprocess_cleanup
+from .utils import get_unique_filename, postprocess_cleanup, unpack_caption
 import os, re, requests, shutil, sys, random, ffmpy
 
 userConfig = load_config()
@@ -21,6 +21,7 @@ def download_progressive(stream, itag, title, resolution, file_extention, captio
     if caption_code:
         print(f'Downloading Caption ({caption_code})...')
         caption = captions[caption_code]
+        _, caption_lang = unpack_caption(caption)
         caption_file = os.path.join(tempDIR, random_filename + '_cap.srt')
         caption.save_captions(caption_file)
         print('Processing...')
@@ -28,7 +29,7 @@ def download_progressive(stream, itag, title, resolution, file_extention, captio
         output_temp_file_with_subs = os.path.join(tempDIR, random_filename + '_merged.' + file_extention)
         ff = ffmpy.FFmpeg(
             inputs={output_temp_file: None},
-            outputs={output_temp_file_with_subs: ['-i', caption_file, '-c', 'copy', '-c:s', 'mov_text', '-metadata:s:s:0', f'language={caption_code}', '-metadata:s:s:0', f'title={caption_code}', '-metadata:s:s:0', f'handler_name={caption_code}']}
+            outputs={output_temp_file_with_subs: ['-i', caption_file, '-c', 'copy', '-c:s', 'mov_text', '-metadata:s:s:0', f'language={caption_code}', '-metadata:s:s:0', f'title={caption_lang}', '-metadata:s:s:0', f'handler_name={caption_lang}']}
         )
         ff.run(stdout=devnull, stderr=devnull)
         devnull.close()

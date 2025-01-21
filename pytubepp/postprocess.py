@@ -1,6 +1,6 @@
 from mutagen.id3 import ID3, APIC, TIT2, TPE1, TALB
 from .config import get_temporary_directory, load_config
-from .utils import get_unique_filename, postprocess_cleanup
+from .utils import get_unique_filename, postprocess_cleanup, unpack_caption
 from .download import download_thumbnail
 import os, shutil, ffmpy
 
@@ -17,6 +17,7 @@ def merge_audio_video(title, resolution, file_extention, random_filename, captio
     if caption_code:
         print(f'Downloading Caption ({caption_code})...')
         caption = captions[caption_code]
+        _, caption_lang = unpack_caption(caption)
         srt_file = os.path.join(tempDIR, random_filename + '_cap.srt')
         caption.save_captions(srt_file)
         vtt_file = os.path.join(tempDIR, random_filename + '_cap.vtt')
@@ -38,7 +39,7 @@ def merge_audio_video(title, resolution, file_extention, random_filename, captio
         input_params = {video_file: None, audio_file: None}
         output_params = {output_temp_file: ['-i', subtitle_file, '-c:v', 'copy', '-c:a', 'copy', 
                         '-c:s', subtitle_codec, '-metadata:s:s:0', f'language={caption_code}',
-                        '-metadata:s:s:0', f'title={caption_code}', '-metadata:s:s:0', f'handler_name={caption_code}']}
+                        '-metadata:s:s:0', f'title={caption_lang}', '-metadata:s:s:0', f'handler_name={caption_lang}']}
         
         devnull = open(os.devnull, 'w')
         ff = ffmpy.FFmpeg(inputs=input_params, outputs=output_params)
