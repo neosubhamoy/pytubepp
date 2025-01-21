@@ -36,7 +36,7 @@ def get_version():
         return "Unknown"
     
 def is_valid_url(url):
-    match = re.search(r"(https?://(?:www\.|music\.)?youtube\.com/watch\?v=[^&]{11}|https?://youtu\.be/[^?&]*(\?si=[^&]*)?)", url)
+    match = re.search(r"(https?://(?:www\.|music\.)?youtube\.com/(?:watch\?v=[^&]{11}|shorts/[^?&]+)|https?://youtu\.be/[^?&]*(\?si=[^&]*)?)", url)
     return match
     
 def get_unique_filename(filename, directory=downloadDIR):
