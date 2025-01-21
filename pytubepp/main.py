@@ -46,7 +46,7 @@ class YouTubeDownloader:
         if not nodejs_installed():
             print("\nWarning: Node.js is not installed or not found in PATH!")
             print("BotGuard poToken generation will not work properly without Node.js environment")
-            print("Please install Node.js from https://nodejs.org/en/download\n")
+            print("Please install Node.js, read https://github.com/neosubhamoy/pytubepp#%EF%B8%8F-installation for instructions\n")
         
         if is_valid_url(link):
             link = is_valid_url(link).group(1)
