@@ -47,6 +47,17 @@ def get_unique_filename(filename, directory=downloadDIR):
         counter += 1
     return filename
 
+def unpack_caption(caption):
+    caption_str = str(caption)
+    code_start = caption_str.find('code="') + 6
+    code_end = caption_str.find('"', code_start)
+    lang_start = caption_str.find('lang="') + 6
+    lang_end = caption_str.find('"', lang_start)
+    
+    code = caption_str[code_start:code_end]
+    lang = caption_str[lang_start:lang_end]
+    return code, lang
+
 def postprocess_cleanup(dir, files, random_filename):
     for file in files:
         file_path = os.path.join(dir, random_filename + file)

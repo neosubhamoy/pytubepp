@@ -3,7 +3,7 @@ from tabulate import tabulate
 from .config import get_temporary_directory, load_config, update_config, reset_config
 from .download import download_progressive, download_nonprogressive, download_audio, progress
 from .postprocess import merge_audio_video, convert_to_mp3
-from .utils import get_version, clear_temp_files, is_valid_url, network_available, ffmpeg_installed, nodejs_installed
+from .utils import get_version, clear_temp_files, is_valid_url, network_available, ffmpeg_installed, nodejs_installed, unpack_caption
 import appdirs, os, re, sys, argparse, json
 
 class YouTubeDownloader:
@@ -151,9 +151,19 @@ class YouTubeDownloader:
                 print('Sorry, No video streams found....!!!')
                 sys.exit()
 
-            print(f'\nTitle: {self.video.title}\nAuthor: {self.author}\nPublished On: {self.video.publish_date.strftime("%d/%m/%Y")}\nDuration: {f"{self.video.length//3600:02}:{(self.video.length%3600)//60:02}:{self.video.length%60:02}" if self.video.length >= 3600 else f"{(self.video.length%3600)//60:02}:{self.video.length%60:02}"}\nViews: {self.views}\nCaptions: {[caption.code for caption in self.captions.keys()] or "Unavailable"}\n')
+            print(f'\nTitle: {self.video.title}\nAuthor: {self.author}\nPublished On: {self.video.publish_date.strftime("%d/%m/%Y")}\nDuration: {f"{self.video.length//3600:02}:{(self.video.length%3600)//60:02}:{self.video.length%60:02}" if self.video.length >= 3600 else f"{(self.video.length%3600)//60:02}:{self.video.length%60:02}"}\nViews: {self.views}\nCaptions: {"Available" if self.captions else "Unavailable"}')
+                
+            print('\n')
             print(tabulate(table, headers=['Stream', 'Alias (for -s flag)', 'Format', 'Size', 'FrameRate', 'V-Codec', 'A-Codec', 'V-BitRate', 'A-BitRate']))
             print('\n')
+
+            if self.captions:
+                caption_table = []
+                for caption in self.captions:
+                    cap_code, cap_lang = unpack_caption(caption)
+                    caption_table.append([cap_lang, cap_code])
+                print(tabulate(caption_table, headers=['Caption', 'CaptionCode (for -c flag)']))
+                print('\n')
         else:
             print('\nInvalid video link! Please enter a valid video url...!!')
 
@@ -204,6 +214,15 @@ class YouTubeDownloader:
                 print('Sorry, No video streams found....!!!')
                 sys.exit()
 
+            captions_list = []
+            if self.captions:
+                for caption in self.captions:
+                    cap_code, cap_lang = unpack_caption(caption)
+                    captions_list.append({
+                        'code': cap_code,
+                        'lang': cap_lang
+                    })
+
             output = {
                 'id': self.video.video_id,
                 'title': self.video.title,
@@ -213,7 +232,7 @@ class YouTubeDownloader:
                 'published_on': self.video.publish_date.strftime('%d/%m/%Y'),
                 'duration': self.video.length,
                 'streams': streams_list,
-                'captions': [caption.code for caption in self.captions.keys()] or None
+                'captions': captions_list or None
             }
             
             print(json.dumps(output, indent=4 if prettify else None))
