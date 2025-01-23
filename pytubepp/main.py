@@ -104,6 +104,13 @@ class YouTubeDownloader:
             
             # Use HDR stream if available, otherwise use the original stream
             final_stream = hdr_stream if hdr_stream else matching_stream
+            
+            # For 720p, check if HigherFps MP4 version exists and prefer it
+            if res == '720p' and not hdr_stream:
+                higher_fps_stream = self.stream.get_by_itag(298)
+                if higher_fps_stream:
+                    final_stream = higher_fps_stream
+            
             audio_stream = self.stream.get_by_itag(_select_suitable_audio_stream(final_stream))
             
             total_size = final_stream.filesize + audio_stream.filesize
