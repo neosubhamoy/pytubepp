@@ -46,16 +46,16 @@
     - Android (using Termux): `pkg install python`
 2. Install FFmpeg 
     - Linux (Debian): `sudo apt install ffmpeg`<br>
-    - Linux (Fedora): `sudo dnf install ffmpeg-free`<br>
+    - Linux (Fedora) ([enable](https://docs.fedoraproject.org/en-US/quick-docs/rpmfusion-setup/#_enabling_the_rpm_fusion_repositories_using_command_line_utilities) rpmfusion free+nonfree repos before installing): `sudo dnf install ffmpeg`<br>
     - Linux (Arch): `sudo pacman -S ffmpeg`<br>
     - Windows (10/11): `winget install ffmpeg`<br>
     - MacOS (using Homebrew): `brew install ffmpeg`<br>
     - Android (using Termux): `pkg install ffmpeg`
 3. Install Node.js
-    - Linux (Debian): `curl -o- https://fnm.vercel.app/install | bash && fnm install --lts && fnm use lts`<br>
-    - Linux (Fedora): `curl -o- https://fnm.vercel.app/install | bash && fnm install --lts && fnm use lts`<br>
-    - Linux (Arch): `curl -o- https://fnm.vercel.app/install | bash && fnm install --lts && fnm use lts`<br>
-    - Windows (10/11): `winget install Schniz.fnm;fnm install --lts;fnm use lts`<br>
+    - Linux (Debian): `sudo apt install nodejs`<br>
+    - Linux (Fedora): `sudo dnf install nodejs`<br>
+    - Linux (Arch): `sudo pacman -S nodejs-lts-iron npm`<br>
+    - Windows (10/11): `winget install OpenJS.NodeJS.LTS`<br>
     - MacOS (using Homebrew): `brew install node`<br>
     - Android (using Termux): `pkg install nodejs`
 4. Install PytubePP (using PIP)
@@ -112,7 +112,7 @@ pytubepp "https://youtube.com/watch?v=2lAe1cqCOXo" -i
 | :--- | :---  | :---               | :---         | :---       | :---    |
 | -s | Choose preferred download stream | YES | YES | `144` `144p` `240` `240p` `360` `360p` `480` `480p` `720` `720p` `hd` `1080` `1080p` `fhd` `1440` `1440p` `2k` `2160` `2160p` `4k` `4320` `4320p` `8k` `mp3` (Pass any one of them) | Your chosen Default Stream via `-ds` flag |
 | -c | Choose preferred caption | YES | YES | All [ISO 639-1 Language Codes](https://www.w3schools.com/tags/ref_language_codes.asp) + auto generated ones + `none` for No Caption (Pass any one of them) eg: `en` for English | Your chosen Default Caption via `-dc` flag |
-| -i | Shows the video information like: Title, Author, Views, Publication Date, Duration, Available Download Streams | NO | YES | No parameters | No default |
+| -i | Shows the video information like: Title, Author, Views, Publication Date, Duration, Available Download Streams and Captions | NO | YES | No parameters | No default |
 | -ls | Lists all available streams (video, audio, caption) (only for debuging purposes) | NO | YES | No parameters | No default |
 | -ri | Shows the video information in raw json format | NO | YES | No parameters | No default |
 | -jp | Shows raw json output in prettified view (with indentation: 4) (primarily used with -ri flag)| NO | YES | No parameters | No default |
