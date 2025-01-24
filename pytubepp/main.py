@@ -4,6 +4,7 @@ from .config import get_temporary_directory, load_config, update_config, reset_c
 from .download import download_progressive, download_nonprogressive, download_audio, progress
 from .postprocess import merge_audio_video, convert_to_mp3
 from .utils import get_version, clear_temp_files, is_valid_url, network_available, ffmpeg_installed, nodejs_installed, unpack_caption
+from .postinstaller import postinstall
 import appdirs, os, re, sys, argparse, json
 
 class YouTubeDownloader:
@@ -46,7 +47,7 @@ class YouTubeDownloader:
         if not nodejs_installed():
             print("\nWarning: Node.js is not installed or not found in PATH!")
             print("BotGuard poToken generation will not work properly without Node.js environment")
-            print("Please install Node.js, read https://github.com/neosubhamoy/pytubepp#%EF%B8%8F-installation for instructions\n")
+            print("Please install Node.js, by running: pytubepp --postinstall or read https://github.com/neosubhamoy/pytubepp#%EF%B8%8F-installation for manual instructions\n")
         
         if is_valid_url(link):
             link = is_valid_url(link).group(1)
@@ -295,7 +296,7 @@ class YouTubeDownloader:
         if not ffmpeg_installed():
             print("\nWarning: FFmpeg is not installed or not found in PATH!")
             print("Some core functionalities like video processing will not work properly without FFmpeg")
-            print("Please install FFmpeg, read https://github.com/neosubhamoy/pytubepp#%EF%B8%8F-installation for instructions\n")
+            print("Please install FFmpeg, by running: pytubepp --postinstall or read https://github.com/neosubhamoy/pytubepp#%EF%B8%8F-installation for manual instructions\n")
             sys.exit()
         
         if self.set_video_info(link):
@@ -388,6 +389,7 @@ def main():
     parser.add_argument('-sc', '--show-config', action='store_true', help='show all current user config settings')
     parser.add_argument('-r', '--reset-default', action='store_true', help='reset to default settings (download_folder and default_stream)')
     parser.add_argument('-ct', '--clear-temp', action='store_true', help='clear temporary files (audio, video, thumbnail files of the failed, incomplete downloads)')
+    parser.add_argument('-pi', '--postinstall', action='store_true', help='auto install external dependencies (supported os: windows, linux - debian fedora arch, macos)')
     parser.add_argument('-v', '--version', action='store_true', help='show version number')
     args = parser.parse_args()
 
@@ -414,6 +416,8 @@ def main():
             print('\nVideo url supplied! ignoreing -ct flag...!!')
         if args.show_config:
             print('\nVideo url supplied! ignoreing -sc flag...!!')
+        if args.postinstall:
+            print('\nVideo url supplied! ignoreing -pi flag...!!')
 
         # Handle info display flags
         if args.show_info:
@@ -640,6 +644,9 @@ def main():
 
         if args.show_config:
             print(f'\ntempDIR: {downloader.temp_dir} (Unchangeable) \nconfigDIR: {downloader.config_dir} (Unchangeable)\ndownloadDIR: {downloader.download_dir}\ndefaultStream: {downloader.default_stream}\ndefaultCaption: {downloader.default_caption}\n')
+
+        if args.postinstall:
+            postinstall()
 
         if args.version:
             print(f'pytubepp {downloader.version}')
