@@ -271,11 +271,11 @@ class YouTubeDownloader:
         print(f'\nTitle: {self.title}')
         
         if chosen_stream == 'mp3':
-            print(f'Selected: Audio [128kbps (140)]')
+            print(f'Selected: Audio [128kbps (140)] --> (MP3)')
             return
             
         if chosen_stream in ['360', '360p']:
-            print(f"Selected: Video [360p (18)] + Audio [96kbps (18)]{f' + Caption [{chosen_caption}]' if chosen_caption else ''}")
+            print(f"Selected: Video [360p (18)] + Audio [96kbps (18)]{f' + Caption [{chosen_caption}]' if chosen_caption else ''} --> (MP4)")
             return
             
         _select_suitable_audio_stream = lambda stream: 251 if stream.mime_type == 'video/webm' else 140
@@ -296,7 +296,11 @@ class YouTubeDownloader:
             
             audio_stream = self.stream.get_by_itag(_select_suitable_audio_stream(matching_stream))
             
-            print(f"Selected: Video [{res} ({matching_stream.itag})] + Audio [{audio_stream.abr} ({audio_stream.itag})]{f' + Caption [{chosen_caption}]' if chosen_caption else ''}")
+            output_format = 'MP4'
+            if matching_stream.mime_type == 'video/webm':
+                output_format = 'WEBM'
+            
+            print(f"Selected: Video [{res} ({matching_stream.itag})] + Audio [{audio_stream.abr} ({audio_stream.itag})]{f' + Caption [{chosen_caption}]' if chosen_caption else ''} --> ({output_format})")
 
     def download_stream(self, link, chosen_stream, chosen_caption=None):
         if not ffmpeg_installed():
