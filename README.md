@@ -30,7 +30,7 @@
 ### **📎 Pre-Requirements**
 * [Python](https://www.python.org/downloads/) (>=3.8)
 * [FFmpeg](https://ffmpeg.org/)
-* [Node.js](https://nodejs.org/en/download/) (required for auto YT poToken genration which is currently not possible in Python environment)
+* [Node.js](https://nodejs.org/en/download/)
 
 ### **🧩 Python Dependencies**
 * [pytubefix](https://pypi.org/project/pytubefix/)
@@ -43,6 +43,9 @@
 * [setuptools](https://pypi.org/project/setuptools/)
 
 ### **🛠️ Installation**
+
+Open a Terminal/CMD (CLI) window and run the following commands one after one step by step (based on your OS) to install 'PytubePP' in your system!
+
 1. Install Python and PIP
     - Linux (Debian): Python is pre-installed install PIP using `sudo apt install python3-pip`<br>
     - Linux (Fedora): Python is pre-installed install PIP using `sudo dnf install python3-pip`<br>
@@ -114,7 +117,14 @@ pytubepp "https://youtube.com/watch?v=2lAe1cqCOXo" -s mp3
 ```terminal
 pytubepp "https://youtube.com/watch?v=2lAe1cqCOXo" -i
 ```
-* To cancel/stop an ongoing download press `CTRL` + `C` on keyboard (it is recommended to run the `-ct` flag once after canceling an ongoing download).
+* To cancel/stop an ongoing download press `CTRL` + `C` on keyboard (it is highly recommended to run the `pytubepp -ct` command once after canceling an ongoing download).
+
+* To set default stream (suppose 1080p) use: `pytubepp -ds 1080p` command (This is useful when you always preffer to download this stream even if higher resolution stream is available. If You set default stream then next time when you download, You don't need to pass the `-s 1080p` flag, just pass the video url and it will auto select the `1080p` stream by default).
+
+* To set default caption (suppose en - English) use: `pytubepp -dc en` command (Useful when you always preffer to embed caption in videos and in a specific language, If You set default caption, You don't need to pass `-c en` flag in next downloads just pass the video url).
+
+* You can also view all these current configurations using: `pytubepp -sc` command and reset them using: `pytubepp -r` if needed.
+
 * List of all available flags are given below:
 
 | Short Flag | Flag | Usage | Requires Parameter | Requires URL | Parameters | Default |
@@ -128,9 +138,9 @@ pytubepp "https://youtube.com/watch?v=2lAe1cqCOXo" -i
 | -ds | --default-stream | Set default download stream | YES | NO | `144p` `240p` `360p` `480p` `720p` `1080p` `1440p` `2160p` `4320p` `mp3` `max` (Pass any one of them) | `max` |
 | -dc | --default-caption | Set default caption | YES | NO | All [ISO 639-1 Language Codes](https://www.w3schools.com/tags/ref_language_codes.asp) + auto generated ones + `none` for No Caption (Pass any one of them) eg: `en` for English | `none` |
 | -df | --download-folder | Set custom download folder path | YES | NO | Use the full path excluding the last trailing slash within double quotes eg(in Linux): `"/path/to/folder"` (Make sure the folder path you enterted is already created and accessable) | Within `PytubePP Downloads` folder in your System's `Downloads` folder |
-| -r | --reset-default | Reset to default configuration (Download Folder, Default Stream) | NO | NO | No parameters | No default |
+| -r | --reset-default | Reset to default configuration (Download Folder, Default Stream, Default Caption) | NO | NO | No parameters | No default |
 | -sc | --show-config | Show all current user configurations | NO | NO | No parameters | No default |
-| -ct | --clear-temp | Clear temporary files (audio, video, thumbnail) of the failed, incomplete downloads | NO | NO | No parameters | No default |
+| -ct | --clear-temp | Clear temporary files (audio, video, thumbnail, caption) of the failed, incomplete downloads | NO | NO | No parameters | No default |
 | -pi | --postinstall | Auto install all external dependencies (FFmpeg, Node.js) (in Windows, Linux - debian fedora arch, MacOS) | NO | NO | No parameters | No default |
 
 ### 🛠️ Contributing / Building from Source
