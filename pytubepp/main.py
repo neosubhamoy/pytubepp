@@ -288,6 +288,12 @@ class YouTubeDownloader:
                 hdr_stream = self.stream.get_by_itag(hdr_itags.get(res))
             
             matching_stream = hdr_stream if hdr_stream else self.stream.filter(res=res).first()
+            
+            if res == '720p' and not hdr_stream:
+                high_fps_stream = self.stream.get_by_itag(298)
+                if high_fps_stream:
+                    matching_stream = high_fps_stream
+            
             audio_stream = self.stream.get_by_itag(_select_suitable_audio_stream(matching_stream))
             
             print(f"Selected: Video [{res} ({matching_stream.itag})] + Audio [{audio_stream.abr} ({audio_stream.itag})]{f' + Caption [{chosen_caption}]' if chosen_caption else ''}")
