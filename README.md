@@ -9,13 +9,13 @@
 [![builds](https://img.shields.io/badge/builds-passing-brightgreen.svg?style=flat)](https://github.com/neosubhamoy/pytubepp/)
 [![PRs](https://img.shields.io/badge/PRs-welcome-blue.svg?style=flat)](https://github.com/neosubhamoy/pytubepp/)
 
-😀 GOOD NEWS: If you are not a power user and don't want to bother remembering PytubePP Commands! (You are not familier with Command Line Tools). We recently released a Browser Extension that can auto detect YouTube Videos and You can download the Video in one click directly from the browser using PytubePP CLI. Install [PytubePP Helper](https://github.com/neosubhamoy/pytubepp-helper) app in your System and add [PytubePP Extension](https://github.com/neosubhamoy/pytubepp-extension) in your Browser to get started.
+😀 NEWS: If you are not a power user and don't want to bother remembering PytubePP Commands! (You are not familier with Command Line Tools). We recently released a Browser Extension that can auto detect YouTube Videos and You can download the Video in one click directly from the browser using PytubePP CLI. Install [PytubePP Helper](https://github.com/neosubhamoy/pytubepp-helper) app in your System and add [PytubePP Extension](https://github.com/neosubhamoy/pytubepp-extension) in your Browser to get started.
 
 > **🥰 Liked this project? Please consider giving it a Star (🌟) on github to show us your appreciation and help the algorythm recommend this project to even more awesome people like you!**
 
 ### **💻 Supported Platforms**
-- Windows (10 / 11)
-- Linux (Debian, Fedora, Arch)
+- Windows
+- Linux
 - MacOS
 - Android (Termux)
 
@@ -45,6 +45,8 @@
 ### **🛠️ Installation**
 
 Open a Terminal/CMD (CLI) window and run the following commands one after one step by step (based on your OS) to install 'PytubePP' in your system!
+
+> If you want to follow along make sure [WinGet](https://learn.microsoft.com/en-us/windows/package-manager/winget/#install-winget) is enabled if you are on Windows (verify using `winget --version`), install [Homebrew](https://brew.sh/) if you are on MacOS and install [Termux](https://termux.dev/) if you are on Android
 
 1. Install Python and PIP
     - Linux (Debian): Python is pre-installed install PIP using `sudo apt install python3-pip`<br>
@@ -141,7 +143,7 @@ pytubepp "https://youtube.com/watch?v=2lAe1cqCOXo" -i
 | -r | --reset-default | Reset to default configuration (Download Folder, Default Stream, Default Caption) | NO | NO | No parameters | No default |
 | -sc | --show-config | Show all current user configurations | NO | NO | No parameters | No default |
 | -ct | --clear-temp | Clear temporary files (audio, video, thumbnail, caption) of the failed, incomplete downloads | NO | NO | No parameters | No default |
-| -pi | --postinstall | Auto install all external dependencies (FFmpeg, Node.js) (in Windows, Linux - debian fedora arch, MacOS) | NO | NO | No parameters | No default |
+| -pi | --postinstall | Auto install all external dependencies (FFmpeg, Node.js) (works in Windows, Linux - debian fedora arch, MacOS) | NO | NO | No parameters | No default |
 
 ### 🛠️ Contributing / Building from Source
 
@@ -154,19 +156,20 @@ Want to be part of this? Feel free to contribute...!! Pull Requests are always w
 
 > Use `python3` and `pip3` commands instead of `python` and `pip` if you are on Linux or MacOS.
 
-3. Install python dependencies
+3. Create a Python virtual environment (venv) and activate it (Optional)
+4. Install python dependencies
 
 ```terminal
 pip install -r requirements.txt
 ```
-4. build, install and test the module
+5. build, install and test the module
 
 ```terminal
-python -m build                                        // build the module
+python -m build   // build the module
 
 pip install .\dist\pytubepp-<version>-py3-none-any.whl   // install the module (give the path to the newly genrated whl file based on your OS path style and don't forget to replace the <version> with the actual version number)
 ```
-5. Do the changes, Send a Pull Request with proper Description (NOTE: Pull Requests Without Proper Description will be Rejected)
+6. Do the changes, Send a Pull Request with proper Description (NOTE: Pull Requests Without Proper Description will be Rejected)
 
 ⭕ Noticed any Bugs? or Want to give me some suggetions? always feel free to open an issue...!!
 
