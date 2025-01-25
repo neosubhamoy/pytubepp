@@ -21,8 +21,8 @@ def postinstall():
                     package_manager = 'winget'  # Windows Package Manager
                 else:
                     print("OS: Windows (winget not enabled)")
-                    user_input = input("WinGet is not available. Do you want to enable winget? (Make sure to login to Windows before enabling) [yes/no]: ").strip().lower()
-                    if user_input in ['yes', 'y']:
+                    user_input = input("WinGet is not available. Do you want to enable winget? (Make sure to login to Windows before enabling) [Yes/no]: ").strip().lower()
+                    if user_input in ['yes', 'y', '']:
                         print("Enabling winget...")
                         subprocess.run(['powershell', '-Command', 'Add-AppxPackage -RegisterByFamilyName -MainPackage Microsoft.DesktopAppInstaller_8wekyb3d8bbwe'])
                         print("WinGet enabled successfully! Please restart your computer and re-run the post install script: pytubepp --postinstall")
@@ -43,8 +43,8 @@ def postinstall():
                 print("OS: Linux (dnf)")
                 distro_id = subprocess.run(['grep', '^ID=', '/etc/os-release'], stdout=subprocess.PIPE, stderr=subprocess.DEVNULL)
                 if distro_id.returncode == 0 and 'fedora' in distro_id.stdout.decode().strip() and ffmpeg_needed:
-                    user_input = input("Looks like you are using Fedora. Do you want to enable RPM Fusion free and nonfree repositories? (answer no if already enabled) [yes/no]: ").strip().lower()
-                    if user_input in ['yes', 'y']:
+                    user_input = input("Looks like you are using Fedora. Do you want to enable RPM Fusion free and nonfree repositories? (answer no if already enabled) [Yes/no]: ").strip().lower()
+                    if user_input in ['yes', 'y', '']:
                         print("Enabling RPM Fusion repositories...")
                         fedora_version = subprocess.run(['rpm', '-E', '%fedora'], stdout=subprocess.PIPE, stderr=subprocess.DEVNULL)
                         if fedora_version.returncode == 0:
@@ -70,8 +70,8 @@ def postinstall():
                 package_manager = 'brew'  # Homebrew for macOS
             else:
                 print("OS: MacOS (brew not installed)")
-                user_input = input("Homebrew is not installed. Do you want to install Homebrew? [yes/no]: ").strip().lower()
-                if user_input in ['yes', 'y']:
+                user_input = input("Homebrew is not installed. Do you want to install Homebrew? [Yes/no]: ").strip().lower()
+                if user_input in ['yes', 'y', '']:
                     print("Installing Homebrew...")
                     subprocess.run('/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"', shell=True)
                     print("Homebrew installation completed! Please restart your mac and re-run the post install script: pytubepp --postinstall")
@@ -89,8 +89,8 @@ def postinstall():
         if nodejs_needed:
             print("- Node.js")
         
-        user_input = input("Do you want to proceed with the installation? [yes/no]: ").strip().lower()
-        if user_input not in ['yes', 'y']:
+        user_input = input("Do you want to proceed with the installation? [Yes/no]: ").strip().lower()
+        if user_input not in ['yes', 'y', '']:
             print("Installation aborted! exiting...!!")
             return
 

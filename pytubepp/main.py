@@ -452,10 +452,7 @@ def main():
                     downloader.download_stream(args.url, args.stream)
                 elif args.stream == 'mp3' and downloader.stream.get_by_itag(140):
                     print(f'\nYou have chosen to download mp3 stream! ( Captioning audio files is not supported )')
-                    answer = input('Do you still want to continue downloading ? [yes/no]\n')
-                    while answer not in ['yes', 'y', 'no', 'n']:
-                        print('Invalid answer! try again...!! answer with: [yes/y/no/n]')
-                        answer = input('Do you still want to continue downloading ? [yes/no]\n')
+                    answer = input('Do you still want to continue downloading? [yes/No]: ').strip().lower()
                     if answer in ['yes', 'y']:
                         downloader.download_stream(args.url, args.stream)
                     else:
@@ -469,10 +466,7 @@ def main():
                     downloader.download_stream(args.url, args.stream)
                 elif args.stream == 'mp3' and downloader.stream.get_by_itag(140):
                         print(f'\nYou have chosen to download mp3 stream! ( Captioning audio files is not supported )')
-                        answer = input('Do you still want to continue downloading ? [yes/no]\n')
-                        while answer not in ['yes', 'y', 'no', 'n']:
-                            print('Invalid answer! try again...!! answer with: [yes/y/no/n]')
-                            answer = input('Do you still want to continue downloading ? [yes/no]\n')
+                        answer = input('Do you still want to continue downloading? [yes/No]: ').strip().lower()
                         if answer in ['yes', 'y']:
                             downloader.download_stream(args.url, args.stream)
                         else:
@@ -481,10 +475,7 @@ def main():
                     downloader.download_stream(args.url, args.stream, downloader.default_caption)
                 else:
                     print(f'\nDefault caption not available! ( Default: {downloader.default_caption} | Available: {[caption.code for caption in downloader.captions.keys()] or "Nothing"} )')
-                    answer = input('Do you still want to continue downloading without caption? [yes/no]\n')
-                    while answer not in ['yes', 'y', 'no', 'n']:
-                        print('Invalid answer! try again...!! answer with: [yes/y/no/n]')
-                        answer = input('Do you still want to continue downloading without caption? [yes/no]\n')
+                    answer = input('Do you still want to continue downloading without caption? [yes/No]: ').strip().lower()
                     if answer in ['yes', 'y']:
                         downloader.download_stream(args.url, args.stream)
                     else:
@@ -505,10 +496,7 @@ def main():
                     else:
                         if downloader.maxres:
                             print(f'\nDefault stream not available! ( Default: {downloader.default_stream} | Available: {downloader.maxres} )')
-                            answer = input('Do you want to download the maximum available stream ? [yes/no]\n')
-                            while answer not in ['yes', 'y', 'no', 'n']:
-                                print('Invalid answer! try again...!! answer with: [yes/y/no/n]')
-                                answer = input('Do you want to download the maximum available stream ? [yes/no]\n')
+                            answer = input('Do you want to download the maximum available stream? [yes/No]: ').strip().lower()
                             if answer in ['yes', 'y']:
                                 downloader.download_stream(args.url, downloader.maxres)
                             else:
@@ -519,10 +507,7 @@ def main():
                     downloader.download_stream(args.url, downloader.maxres, args.caption)
                 elif downloader.default_stream == 'mp3' and downloader.stream.get_by_itag(140):
                         print(f'\nDefault stream set to mp3! ( Captioning audio files is not supported )')
-                        answer = input('Do you still want to continue downloading ? [yes/no]\n')
-                        while answer not in ['yes', 'y', 'no', 'n']:
-                            print('Invalid answer! try again...!! answer with: [yes/y/no/n]')
-                            answer = input('Do you still want to continue downloading ? [yes/no]\n')
+                        answer = input('Do you still want to continue downloading? [yes/No]: ').strip().lower()
                         if answer in ['yes', 'y']:
                             downloader.download_stream(args.url, downloader.default_stream)
                         else:
@@ -532,10 +517,7 @@ def main():
                 else:
                     if downloader.maxres:
                         print(f'\nDefault stream not available! ( Default: {downloader.default_stream} | Available: {downloader.maxres} )')
-                        answer = input('Do you want to download the maximum available stream ? [yes/no]\n')
-                        while answer not in ['yes', 'y', 'no', 'n']:
-                            print('Invalid answer! try again...!! answer with: [yes/y/no/n]')
-                            answer = input('Do you want to download the maximum available stream ? [yes/no]\n')
+                        answer = input('Do you want to download the maximum available stream? [yes/No]: ').strip().lower()
                         if answer in ['yes', 'y']:
                             downloader.download_stream(args.url, downloader.maxres, args.caption)
                         else:
@@ -552,10 +534,7 @@ def main():
                         downloader.download_stream(args.url, downloader.maxres, downloader.default_caption)
                     else:
                         print(f'\nDefault caption not available! ( Default: {downloader.default_caption} | Available: {[caption.code for caption in downloader.captions.keys()] or "Nothing"} )')
-                        answer = input('Do you still want to continue downloading without caption? [yes/no]\n')
-                        while answer not in ['yes', 'y', 'no', 'n']:
-                            print('Invalid answer! try again...!! answer with: [yes/y/no/n]')
-                            answer = input('Do you still want to continue downloading without caption? [yes/no]\n')
+                        answer = input('Do you still want to continue downloading without caption? [yes/No]: ').strip().lower()
                         if answer in ['yes', 'y']:
                             downloader.download_stream(args.url, downloader.maxres)
                         else:
@@ -565,10 +544,7 @@ def main():
                         downloader.download_stream(args.url, downloader.default_stream)
                     elif downloader.default_stream == 'mp3' and downloader.stream.get_by_itag(140):
                         print(f'\nDefault stream set to mp3! ( Captioning audio files is not supported )')
-                        answer = input('Do you still want to continue downloading ? [yes/no]\n')
-                        while answer not in ['yes', 'y', 'no', 'n']:
-                            print('Invalid answer! try again...!! answer with: [yes/y/no/n]')
-                            answer = input('Do you still want to continue downloading ? [yes/no]\n')
+                        answer = input('Do you still want to continue downloading? [yes/No]: ').strip().lower()
                         if answer in ['yes', 'y']:
                             downloader.download_stream(args.url, downloader.default_stream)
                         else:
@@ -577,10 +553,7 @@ def main():
                         downloader.download_stream(args.url, downloader.default_stream, downloader.default_caption)
                     else:
                         print(f'\nDefault caption not available! ( Default: {downloader.default_caption} | Available: {[caption.code for caption in downloader.captions.keys()] or "Nothing"} )')
-                        answer = input('Do you still want to continue downloading without caption? [yes/no]\n')
-                        while answer not in ['yes', 'y', 'no', 'n']:
-                            print('Invalid answer! try again...!! answer with: [yes/y/no/n]')
-                            answer = input('Do you still want to continue downloading without caption? [yes/no]\n')
+                        answer = input('Do you still want to continue downloading without caption? [yes/No]: ').strip().lower()
                         if answer in ['yes', 'y']:
                             downloader.download_stream(args.url, downloader.default_stream)
                         else:
@@ -588,10 +561,7 @@ def main():
                 else:
                     if downloader.maxres:
                         print(f'\nDefault stream not available! ( Default: {downloader.default_stream} | Available: {downloader.maxres} )')
-                        answer = input('Do you want to download the maximum available stream ? [yes/no]\n')
-                        while answer not in ['yes', 'y', 'no', 'n']:
-                            print('Invalid answer! try again...!! answer with: [yes/y/no/n]')
-                            answer = input('Do you want to download the maximum available stream ? [yes/no]\n')
+                        answer = input('Do you want to download the maximum available stream? [yes/No]: ').strip().lower()
                         if answer in ['yes', 'y']:
                             if downloader.default_caption == 'none':
                                 downloader.download_stream(args.url, downloader.maxres)
@@ -599,14 +569,13 @@ def main():
                                 downloader.download_stream(args.url, downloader.maxres, downloader.default_caption)
                             else:
                                 print(f'\nDefault caption not available! ( Default: {downloader.default_caption} | Available: {[caption.code for caption in downloader.captions.keys()] or "Nothing"} )')
-                                answer = input('Do you still want to continue downloading without caption? [yes/no]\n')
-                                while answer not in ['yes', 'y', 'no', 'n']:
-                                    print('Invalid answer! try again...!! answer with: [yes/y/no/n]')
-                                    answer = input('Do you still want to continue downloading without caption? [yes/no]\n')
+                                answer = input('Do you still want to continue downloading without caption? [yes/No]: ').strip().lower()
                                 if answer in ['yes', 'y']:
                                     downloader.download_stream(args.url, downloader.maxres)
                                 else:
                                     print('Download cancelled! exiting...!!')
+                        else:
+                            print('Download cancelled! exiting...!!')
                     else:
                         print('Sorry, No downloadable video stream found....!!!')
     else:
