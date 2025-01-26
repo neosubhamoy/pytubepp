@@ -84,12 +84,14 @@ pip install pytubepp
 
 **UPDATE: Always make sure 'PytubePP' and 'Pytubefix' is on the latest version to avoid issues (update them at least once a week) (Use the command below to update)**
 
-```
+```terminal
 pip install pytubefix pytubepp --upgrade
 ```
 
+> It is highly recommended to run the post install script once after updating 'PytubePP' using: `pytubepp --postinstall` command
+
 **UNINSTALL: If you want to uninstall PytubePP (Use the command below to uninstall) NOTE: it will only remove the 'PytubePP' python package**
-```
+```terminal
 pip uninstall pytubepp -y
 ```
 
