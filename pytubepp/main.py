@@ -159,7 +159,7 @@ class YouTubeDownloader:
                 print('Sorry, No video streams found....!!!')
                 sys.exit()
 
-            print(f'\nTitle: {self.video.title}\nAuthor: {self.author}\nPublished On: {self.video.publish_date.strftime("%d/%m/%Y")}\nDuration: {f"{self.video.length//3600:02}:{(self.video.length%3600)//60:02}:{self.video.length%60:02}" if self.video.length >= 3600 else f"{(self.video.length%3600)//60:02}:{self.video.length%60:02}"}\nViews: {self.views}\nCaptions: {"Available" if self.captions else "Unavailable"}')
+            print(f'\nTitle: {self.video.title}\nAuthor: {self.author}\nPublished On: {self.video.publish_date.strftime("%d/%m/%Y") if self.video.publish_date else "Unknown"}\nDuration: {f"{self.video.length//3600:02}:{(self.video.length%3600)//60:02}:{self.video.length%60:02}" if self.video.length >= 3600 else f"{(self.video.length%3600)//60:02}:{self.video.length%60:02}"}\nViews: {self.views}\nCaptions: {"Available" if self.captions else "Unavailable"}')
                 
             print('\n')
             print(tabulate(table, headers=['Stream', 'Alias (for -s flag)', 'Format', 'Size', 'FrameRate', 'V-Codec', 'A-Codec', 'V-BitRate', 'A-BitRate']))
@@ -237,7 +237,7 @@ class YouTubeDownloader:
                 'author': self.author,
                 'thumbnail_url': self.thumbnail,
                 'views': self.video.views,
-                'published_on': self.video.publish_date.strftime('%d/%m/%Y'),
+                'published_on': self.video.publish_date.strftime('%d/%m/%Y') if self.video.publish_date else None,
                 'duration': self.video.length,
                 'streams': streams_list,
                 'captions': captions_list or None
