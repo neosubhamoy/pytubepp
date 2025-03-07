@@ -5,8 +5,8 @@ mutagen
 tabulate
 tqdm
 appdirs
+rich
 setuptools
 wheel
 twine
 build
-rich

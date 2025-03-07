@@ -437,10 +437,10 @@ def main():
 
         # Handle info display flags
         if args.show_info:
-            print('Loading...')
+            rprint('Loading...')
             downloader.show_video_info(args.url)
         if args.list_stream:
-            print('Loading...')
+            rprint('Loading...')
             downloader.show_all_streams(args.url)
         if args.raw_info:
             downloader.show_raw_info(args.url, args.json_prettify)
@@ -449,7 +449,7 @@ def main():
         
         # Handle download cases
         if hasattr(args, 'stream') and hasattr(args, 'caption'):
-            print('Loading...')
+            rprint('Loading...')
             if downloader.set_video_info(args.url):
                 if (args.caption not in downloader.captions.keys()) and (args.caption != 'none'):
                     print('\nInvalid caption code or caption not available! Please choose a different caption...!! (use -i to see available captions)')
@@ -466,7 +466,7 @@ def main():
                 else:
                     downloader.download_stream(args.url, args.stream, args.caption)
         elif hasattr(args, 'stream'):
-            print('Loading...')
+            rprint('Loading...')
             if downloader.set_video_info(args.url):
                 if downloader.default_caption == 'none':
                     downloader.download_stream(args.url, args.stream)
@@ -487,7 +487,7 @@ def main():
                     else:
                         print('Download cancelled! exiting...!!')
         elif hasattr(args, 'caption'):
-            print('Loading...')
+            rprint('Loading...')
             if downloader.set_video_info(args.url):
                 if (args.caption not in downloader.captions.keys()) and (args.caption != 'none'):
                     print('\nInvalid caption code or caption not available! Please choose a different caption...!! (use -i to see available captions)')
@@ -531,7 +531,7 @@ def main():
                     else:
                         print('Sorry, No downloadable video stream found....!!!')
         elif not any([args.show_info, args.raw_info, args.json_prettify, args.list_stream]):  # If no info flags are set
-            print('Loading...')
+            rprint('Loading...')
             if downloader.set_video_info(args.url):
                 if downloader.default_stream == 'max' and downloader.maxres:
                     if downloader.default_caption == 'none':
