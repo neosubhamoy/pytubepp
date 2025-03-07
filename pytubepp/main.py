@@ -1,9 +1,10 @@
 from pytubefix import YouTube
 from tabulate import tabulate
+from rich import print as rprint
 from .config import get_temporary_directory, load_config, update_config, reset_config
 from .download import download_progressive, download_nonprogressive, download_audio, progress
 from .postprocess import merge_audio_video, convert_to_mp3
-from .utils import get_version, clear_temp_files, is_valid_url, network_available, ffmpeg_installed, nodejs_installed, unpack_caption
+from .utils import get_version, clear_temp_files, is_valid_url, network_available, ffmpeg_installed, nodejs_installed, unpack_caption, check_update
 from .postinstaller import postinstall
 import appdirs, os, re, sys, argparse, json
 
@@ -45,9 +46,14 @@ class YouTubeDownloader:
             sys.exit()
 
         if not nodejs_installed():
-            print("\nWarning: Node.js is not installed or not found in PATH!")
+            rprint("\n[dark_orange]WARNING:[/dark_orange] Node.js is not installed or not found in PATH!")
             print("BotGuard poToken generation will not work properly without Node.js environment")
-            print("Please install Node.js, by running: pytubepp --postinstall or read https://github.com/neosubhamoy/pytubepp#%EF%B8%8F-installation for manual instructions\n")
+            rprint("Please install Node.js, by running: [green]pytubepp --postinstall[/green] or read [steel_blue3]https://github.com/neosubhamoy/pytubepp#%EF%B8%8F-installation[/steel_blue3] for manual instructions\n")
+        
+        update = check_update()
+        if update[0]:
+            rprint(f'\n[blue]NOTE:[/blue] A newer version of pytubepp is available! ([dark_orange]v{update[1]}[/dark_orange] -> [light_green]v{update[2]}[/light_green])')
+            rprint(f'Please upgrade to the latest version using: [green]{update[3]}[/green]')
         
         if is_valid_url(link):
             link = is_valid_url(link).group(1)
@@ -304,9 +310,9 @@ class YouTubeDownloader:
 
     def download_stream(self, link, chosen_stream, chosen_caption=None):
         if not ffmpeg_installed():
-            print("\nWarning: FFmpeg is not installed or not found in PATH!")
+            rprint("\n[dark_orange]WARNING:[/dark_orange] FFmpeg is not installed or not found in PATH!")
             print("Some core functionalities like video processing will not work properly without FFmpeg")
-            print("Please install FFmpeg, by running: pytubepp --postinstall or read https://github.com/neosubhamoy/pytubepp#%EF%B8%8F-installation for manual instructions\n")
+            rprint("Please install FFmpeg, by running: [green]pytubepp --postinstall[/green] or read [steel_blue3]https://github.com/neosubhamoy/pytubepp#%EF%B8%8F-installation[/steel_blue3] for manual instructions\n")
             sys.exit()
         
         if self.set_video_info(link):

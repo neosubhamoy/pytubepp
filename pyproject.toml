@@ -43,6 +43,7 @@ dependencies = [
   "tabulate",
   "tqdm",
   "appdirs",
+  "rich",
   "setuptools",
 ]
 

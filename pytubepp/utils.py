@@ -1,6 +1,6 @@
 from importlib.metadata import version
 from .config import load_config, get_temporary_directory
-import os, re, subprocess, platform
+import os, re, subprocess, platform, requests
 
 userConfig = load_config()
 downloadDIR = userConfig['downloadDIR']
@@ -79,3 +79,32 @@ def clear_temp_files():
                 print(e)
     else:
         print('No temporary files found to clear...!')
+
+def compare_versions(v1: str, v2: str):
+    parts1 = list(map(int, v1.split('.')))
+    parts2 = list(map(int, v2.split('.')))
+    for i in range(max(len(parts1), len(parts2))):
+        part1 = parts1[i] if i < len(parts1) else 0
+        part2 = parts2[i] if i < len(parts2) else 0
+        if part1 > part2:
+            return 1
+        if part1 < part2:
+            return -1
+    return 0
+
+def get_platform_specific_upgrade_command():
+    if platform.system().lower() == 'windows':
+        return 'pip install pytubefix pytubepp --upgrade; pytubepp --postinstall'
+    else:
+        return 'pip3 install pytubefix pytubepp --upgrade && pytubepp --postinstall'
+
+def check_update():
+    try:
+        response = requests.get('https://pypi.org/pypi/pytubepp/json')
+        if response.status_code != 200:
+            return False, None, None, None
+        latest_version = response.json()['info']['version']
+        current_version = get_version()
+        return compare_versions(current_version, latest_version) == -1, current_version, latest_version, get_platform_specific_upgrade_command()
+    except Exception as e:
+        return False, None, None, None
