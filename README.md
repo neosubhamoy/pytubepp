@@ -33,14 +33,15 @@
 * [Node.js](https://nodejs.org/en/download/)
 
 ### **🧩 Python Dependencies**
-* [pytubefix](https://pypi.org/project/pytubefix/)
-* [ffmpy](https://pypi.org/project/ffmpy/)
-* [mutagen](https://pypi.org/project/mutagen/)
-* [tabulate](https://pypi.org/project/tabulate/)
-* [tqdm](https://pypi.org/project/tqdm/)
-* [appdirs](https://pypi.org/project/appdirs/)
-* [requests](https://pypi.org/project/requests/)
-* [setuptools](https://pypi.org/project/setuptools/)
+* [pytubefix](https://pypi.org/project/pytubefix/),
+[ffmpy](https://pypi.org/project/ffmpy/),
+[mutagen](https://pypi.org/project/mutagen/),
+[tabulate](https://pypi.org/project/tabulate/),
+[tqdm](https://pypi.org/project/tqdm/),
+[appdirs](https://pypi.org/project/appdirs/),
+[requests](https://pypi.org/project/requests/),
+[rich](https://pypi.org/project/rich/),
+[setuptools](https://pypi.org/project/setuptools/)
 
 ### **🛠️ Installation**
 
